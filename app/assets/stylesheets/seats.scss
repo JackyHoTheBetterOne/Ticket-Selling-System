@@ -1,0 +1,31 @@
+// Place all the styles related to the seats controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.appearing {
+  opacity: 1;
+}
+
+.text-box-bubble {
+  position: absolute;
+  background-color: red;
+  height: 55px;
+  width: 105px;
+  top: 62px;
+  left: 107.2px;
+  transition: opacity 0.1s;
+  opacity: 0;
+}
+
+.text-box-bubble:after {
+  transition: 0.2s;
+  width: 0px;
+  height: 0px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid #f00;
+  content: " ";
+  right: 65.5%;
+  top: 100%;
+  position: absolute;
+}
