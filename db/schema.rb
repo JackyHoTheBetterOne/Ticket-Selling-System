@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616213217) do
+ActiveRecord::Schema.define(version: 20150616214428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20150616213217) do
     t.integer  "event_id"
     t.float    "price",      default: 99.99
     t.integer  "level",      default: 1
+    t.integer  "ticket_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -47,6 +48,9 @@ ActiveRecord::Schema.define(version: 20150616213217) do
     t.string   "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "event_id"
   end
+
+  add_index "tickets", ["seat_id"], name: "index_tickets_on_seat_id", using: :btree
 
 end
