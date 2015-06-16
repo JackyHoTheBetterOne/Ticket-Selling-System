@@ -6,6 +6,6 @@ module Codey
   end
 
   def add_code()
-    self["unique_code"] = SecureRandom.uuid
+    self["unique_code"] = rand(9999999999).to_s.center(20, rand(9).to_s) 
   end
 end

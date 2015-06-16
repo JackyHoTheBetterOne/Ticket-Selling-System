@@ -5,6 +5,7 @@ gem 'actionpack', '~> 4.2.1'
 gem 'aasm'
 gem 'devise'
 gem 'inline_svg'
+gem 'pg'
 
 
 
