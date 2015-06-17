@@ -7,7 +7,6 @@ class Seat < ActiveRecord::Base
   belongs_to :event
   has_one :ticket
 
-
 ########################################################## SQL queries
 
 
@@ -39,8 +38,7 @@ class Seat < ActiveRecord::Base
 
 
 ############################################################## Methods
-
-
-
-
+  def make_name
+    self.name = self.row + self.column
+  end
 end
