@@ -15,6 +15,10 @@ class Seat < ActiveRecord::Base
                                         :aasm_state => status)
   }
 
+  scope :find_available_seats_by_name, -> (event_id, names) {
+    where(:event_id => event_id).where(name: names)
+  }
+
 ########################################################## AASM states
 
   aasm do 

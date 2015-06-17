@@ -8,6 +8,7 @@ $ ->
     circle_original_color = '#3b77bf'
     svg = $("#seatty-for-real")
     box = $(".text-box-bubble")
+    event_name = $("#event_name").data("name")
     selected_seats = []
     seat_class_recontruction = (circle) ->
         basic_klass = "seat-circle"
@@ -36,13 +37,36 @@ $ ->
         circle_click: (event) ->
           circle = this
           klass = $(circle).attr('class')
-          console.log(klass)
           if klass.indexOf('selected_seat') is -1
             $(circle).attr('class', klass + " selected_seat")
+            selected_seats.push(circle)
           else
             $(circle).attr('class', seat_class_recontruction(circle))
             $(circle).attr('fill', circle_original_color)
-          selected_seats.push(circle)
+            index = selected_seats.indexOf(circle)
+            selected_seats.splice(index,1)
+        submit_seats: (event) ->
+          i = 0
+          length = selected_seats.length
+          params_obj = []
+          while i < length
+            seat = selected_seats[i]
+            seat_name = $(seat).data("row").toString() + $(seat).data("column").toString()
+            params_obj.push(seat_name)
+            i++
+          console.log(params_obj)
+          $.ajax
+            url: "/events/" + event_name + "/seat_selection"
+            method: "post"
+            data: {
+              seat_selection: params_obj,
+              event_name: event_name
+            }
+            success: (response) ->
+              console.log(response)
+            error: () ->
+              alert('Cannot send the seat selection')
+
       }
     }
   )(window, jQuery)
@@ -52,4 +76,5 @@ $ ->
     'mouseleave.circle_selection', SEAT_SELECTOR.events.circle_mouseleave
   )
   $('.seat-circle').on('click.select', SEAT_SELECTOR.events.circle_click)
+  $('.submit-seats').on('click.submit_seats', SEAT_SELECTOR.events.submit_seats)
 

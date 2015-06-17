@@ -2,6 +2,10 @@ require 'aasm'
 
 class Event < ActiveRecord::Base
   include AASM
+  extend FriendlyId
+
+  validates :name, uniqueness: true, presence: true
+  friendly_id :name
 
 
 ########################################################## Relationships
@@ -14,6 +18,7 @@ class Event < ActiveRecord::Base
 
 ########################################################## AASM states
   aasm do 
+    state :upcoming, :initial => true
   end
 
 

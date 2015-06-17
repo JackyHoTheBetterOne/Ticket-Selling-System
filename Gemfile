@@ -6,6 +6,7 @@ gem 'aasm'
 gem 'devise'
 gem 'inline_svg'
 gem 'pg'
+gem 'friendly_id', '~> 5.1.0'
 
 
 

@@ -42,7 +42,7 @@ class SeatSelectionValidator
       current_column = 0
       while i < count do 
         current_column = columns[i]
-        next_column = column[i+1]
+        next_column = columns[i+1]
         if (current_column+1) != next_column && next_column 
           available_seat_num = Seat.find_available_seats_by_column_range(
                                 @event_id, row.to_s, current_column, next_column).count
@@ -60,9 +60,9 @@ class SeatSelectionValidator
       last_seat_column = columns.last
 
       first_seat_object = Seat.find_available_seats_by_column_range(
-                            @event_id, row.to_s, first_seat_column, first_seat_column) 
+                            @event_id, row.to_s, first_seat_column, first_seat_column).first
       last_seat_object = Seat.find_available_seats_by_column_range(
-                            @event_id. row.to_s, last_seat_column, last_seat_column)
+                            @event_id, row.to_s, last_seat_column, last_seat_column).first
 
       begining_array = Seat.find_available_seats_by_column_range(
                         @event_id, row.to_s, first_seat_column-2, first_seat_column-1)
