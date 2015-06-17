@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616214428) do
+ActiveRecord::Schema.define(version: 20150617204204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20150616214428) do
     t.float    "price",      default: 99.99
     t.integer  "level",      default: 1
     t.integer  "ticket_id"
+    t.float    "x_coor"
   end
 
   create_table "tickets", force: :cascade do |t|

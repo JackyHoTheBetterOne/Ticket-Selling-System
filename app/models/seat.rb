@@ -8,7 +8,12 @@ class Seat < ActiveRecord::Base
   has_one :ticket
 
 ########################################################## SQL queries
-
+  scope :find_available_seats_by_column_range, -> (event_id, row, range_1, range_2, status='available') {
+    column_collection_on_range = range_1 > range_2 ? [*range_2..range_1] : [*range_1..range_2]
+    where(:event_id => event_id).where(:column => column_collection_on_range, 
+                                        :row => row,
+                                        :aasm_state => status)
+  }
 
 ########################################################## AASM states
 

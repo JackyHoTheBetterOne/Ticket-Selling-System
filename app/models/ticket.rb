@@ -9,8 +9,8 @@ class Ticket < ActiveRecord::Base
 
  
 ########################################################## SQL queries
-  scope :find_seat_by_unique_code, -> (event_id, code) {
-    where(:event_id => event_id).where(:unique_code => code)
+  scope :find_ticket_by_barcode, -> (event_id, code) {
+    where(:event_id => event_id).where(:barcode => code)
   }
 
 
