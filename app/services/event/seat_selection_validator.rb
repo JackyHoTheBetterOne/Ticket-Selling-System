@@ -1,4 +1,4 @@
-class SeatSelectionValidator
+class Event::SeatSelectionValidator
   attr_reader :event_id
   attr_reader :seat_collection
   attr_reader :column_collection

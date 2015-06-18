@@ -15,7 +15,8 @@ class Ticket < ActiveRecord::Base
 
 
 ########################################################## AASM states
-  aasm do 
+  aasm do
+    state :valid, :initial => true 
   end
 
 

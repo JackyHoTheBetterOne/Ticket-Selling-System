@@ -1,4 +1,4 @@
-class SeatCreator
+class Event::SeatCreator
   attr_reader :seat_column_obj
   attr_reader :seat_xcoor_obj
 
