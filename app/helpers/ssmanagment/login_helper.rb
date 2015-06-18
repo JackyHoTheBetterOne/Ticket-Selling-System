@@ -1,0 +1,2 @@
+module Ssmanagment::LoginHelper
+end

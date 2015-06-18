@@ -2,6 +2,51 @@ Rails.application.routes.draw do
 
   root 'seats#index'
 
+  namespace "something" do
+    get :email_ticket
+  end
+
+  namespace :onlineticketing do
+    resources :events, only: [] do
+      member do
+        get :hold_seat
+        post :purchase_seat
+      end
+    end
+  end
+
+
+
+  namespace :ssmanagment do
+    devise_for :admins, :skip => :registrations
+    # admin_root_path :ssmanagment_events
+    get    'secretdoor'  => "navigation#page_listing", as: :admin_root_path
+    resources :events, only: [:create, :index, :show, :update] do
+      resources :seats, only: [:show] do
+        # member do
+        #   post :update
+        #   post :reserve
+        #   post :refund #Check backend to see if purchased, prompt warning if so.
+        # end
+      end
+    end
+  end
+
+  namespace :scanner do
+    namespace :api do
+      resources :events, only: [] do
+        resources :seats, only: [] do
+          member do
+            get :find
+            post :scan
+          end
+        end
+      end
+    end
+  end
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
