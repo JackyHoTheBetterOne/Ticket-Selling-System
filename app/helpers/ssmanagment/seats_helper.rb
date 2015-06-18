@@ -1,0 +1,2 @@
+module Ssmanagment::SeatsHelper
+end
