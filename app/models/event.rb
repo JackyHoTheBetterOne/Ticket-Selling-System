@@ -29,7 +29,8 @@ class Event < ActiveRecord::Base
     state :complete
 
     event :finish_planning do
-      transitions :from => :planning, :to => :upcoming if all_seats_priced?
+      transitions :from => :planning, :to => :upcoming
+      #Make sure all seats are priced before continuing
     end
 
     event :event_date do
