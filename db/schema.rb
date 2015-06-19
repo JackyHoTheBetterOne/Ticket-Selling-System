@@ -60,20 +60,29 @@ ActiveRecord::Schema.define(version: 20150619172032) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
+  create_table "price_groups", force: :cascade do |t|
+    t.integer  "price"
+    t.integer  "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "price_groups", ["event_id"], name: "index_price_groups_on_event_id", using: :btree
+
   create_table "seats", force: :cascade do |t|
     t.string   "row"
     t.string   "column"
     t.string   "section"
     t.string   "aasm_state"
     t.string   "name"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "event_id"
-    t.float    "price",      default: 99.99
-    t.integer  "level",      default: 1
+    t.integer  "level",          default: 1
     t.integer  "ticket_id"
     t.float    "x_coor"
-    t.string   "seat_type",  default: "Regular"
+    t.integer  "price_group_id"
+    t.string   "seat_type",      default: "Regular"
   end
 
   add_index "seats", ["event_id"], name: "index_seats_on_event_id", using: :btree
@@ -100,4 +109,5 @@ ActiveRecord::Schema.define(version: 20150619172032) do
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
   add_index "tickets", ["seat_id"], name: "index_tickets_on_seat_id", using: :btree
 
+  add_foreign_key "price_groups", "events", on_delete: :cascade
 end

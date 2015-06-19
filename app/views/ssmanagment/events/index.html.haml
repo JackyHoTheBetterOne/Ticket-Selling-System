@@ -1,0 +1,12 @@
+.popup{style: "display:none"}
+
+.content
+  .top{style: "position: relative;top: 0px"}
+    .left{style: "position: absolute;left: 0;"}
+      Make New Event
+    .right{style:"position: absolute;right: 0;"}
+      Copy Event --- Add This later
+  .inner{style: "position: relative;top: 100px"}
+    %h2 Events
+    -@events.each do |event|
+      %h5{style: "border: 1px solid black"} Event Name: #{event.name}
