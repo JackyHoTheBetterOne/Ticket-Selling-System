@@ -8,5 +8,4 @@ class Admin < ActiveRecord::Base
          :recoverable, :trackable, :validatable
          #Should set a lockout with ips trying to hack?
 
-
 end

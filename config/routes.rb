@@ -16,20 +16,24 @@ Rails.application.routes.draw do
     end
   end
 
-
-
   namespace :ssmanagment do
-    devise_for :admins, :skip => :registrations
-    # admin_root_path :ssmanagment_events
-    get    'secretdoor'  => "navigation#page_listing", as: :admin_root_path
-    resources :events, only: [:create, :index, :show, :update] do
-      resources :seats, only: [:show] do
-        # member do
-        #   post :update
-        #   post :reserve
-        #   post :refund #Check backend to see if purchased, prompt warning if so.
-        # end
-      end
+    root 'events#index'
+    devise_for :admin,
+      skip: [:registrations, :edit, :password],
+      path_names: {
+                    sign_in: "login",
+                    sign_out: "logout"
+                  },
+      controllers: { sessions: "ssmanagment/admin/sessions" }
+    # authenticated do # all other roles
+    #   root :to => 'events#index', :as => :admin_root
+    # end
+    # authenticated :admin do
+      # root :to => 'events#index', :as => :admin_root
+    # end
+    resources :events, only: [:new, :create, :index, :show, :update] do
+      post :copy, on: :member
+      resources :seats, only: [:show]
     end
   end
 

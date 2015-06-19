@@ -5,12 +5,14 @@ class Seat < ActiveRecord::Base
 
 ########################################################## Relationships
   belongs_to :event
+  belongs_to :price_group
   has_one :ticket, dependent: :destroy
+  has_one :ticket_package, through: :tickets
 
 ########################################################## SQL queries
   scope :find_available_seats_by_column_range, -> (event_id, row, range_1, range_2, status='available') {
     column_collection_on_range = range_1 > range_2 ? [*range_2..range_1] : [*range_1..range_2]
-    where(:event_id => event_id).where(:column => column_collection_on_range, 
+    where(:event_id => event_id).where(:column => column_collection_on_range,
                                         :row => row,
                                         :aasm_state => status)
   }
@@ -25,25 +27,25 @@ class Seat < ActiveRecord::Base
 
 ########################################################## AASM states
 
-  aasm do 
+  aasm do
     state :available, :initial => true
     state :reserved
     state :onhold
     state :purchased
-    event :reservation do 
+    event :reservation do
       transitions :from => :available, :to => :reserved
     end
 
-    event :holding do 
+    event :holding do
       transitions :from => :available, :to => :onhold
     end
 
-    event :unholding do 
+    event :unholding do
       transitions :from => :onhold, :to => :available
     end
 
     event :purchase do
-      transitions :from => :reserved, :to => :purchased 
+      transitions :from => :reserved, :to => :purchased
       transitions :from => :available, :to => :purchased
     end
   end

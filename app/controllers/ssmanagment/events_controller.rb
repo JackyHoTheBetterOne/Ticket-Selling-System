@@ -1,15 +1,27 @@
 class Ssmanagment::EventsController < Ssmanagment::BaseController
   respond_to :json, only: []
 
+
+  def new
+  end
+
   def create
     @event = Event.create event_params
   end
 
+  def something
+    console.log("here")
+  end
+
+  def copy
+  end
 
   def index
-    @events = Events.all
-    render some html and send it back
-    render json: @json_data, :status => 200
+    @events = Event.all
+    # byebug
+    # @events = Events.all
+    # render some html and send it back
+    # render json: @json_data, :status => 200
   end
 
   def show

@@ -1,4 +1,5 @@
 class Ssmanagment::BaseController < ApplicationController
-  # layout 'app/editor'
-  before_action :authenticate_admin!
+  layout 'ssmanagment/event_admin'
+
+  before_action :authenticate_ssmanagment_admin!
 end

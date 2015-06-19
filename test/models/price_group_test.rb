@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Ssmanagment::LoginControllerTest < ActionController::TestCase
+class PriceGroupTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
