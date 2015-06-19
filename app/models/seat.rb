@@ -5,7 +5,7 @@ class Seat < ActiveRecord::Base
 
 ########################################################## Relationships
   belongs_to :event
-  has_one :ticket
+  has_one :ticket, dependent: :destroy
 
 ########################################################## SQL queries
   scope :find_available_seats_by_column_range, -> (event_id, row, range_1, range_2, status='available') {
@@ -17,6 +17,10 @@ class Seat < ActiveRecord::Base
 
   scope :find_available_seats_by_name, -> (event_id, names) {
     where(:event_id => event_id).where(name: names)
+  }
+
+  scope :find_seats_by_status, -> (event_id, status='available') {
+    where(:event_id => event_id).where(:aasm_state => status)
   }
 
 ########################################################## AASM states

@@ -1,0 +1,2 @@
+module Onlineticketing::EventsHelper
+end

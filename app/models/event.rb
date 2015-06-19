@@ -10,7 +10,7 @@ class Event < ActiveRecord::Base
 
 ########################################################## Relationships
   has_many :seats, dependent: :destroy
-  has_many :tickets, through: :seats, dependent: :destroy
+  has_many :tickets, dependent: :destroy
     
     
 ########################################################## SQL queries

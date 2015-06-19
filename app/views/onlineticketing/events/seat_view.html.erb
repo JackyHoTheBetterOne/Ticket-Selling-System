@@ -1,0 +1,41 @@
+<div class="seat-selection-page">
+  <header>
+    <h4 class="event-name" id="event-name" data-name="<%= @event.name %>">
+      <%= @event.name %> - <%= @event.show_date  %>
+    </h4>
+    <div class="price-filter-box">
+      <select class="price-filter-button price-filter">
+        <option selected disabled>Price Filter</option>
+        <option value="99.99">$99.99</option>
+        <option value="159.99">$159.99</option>
+      </select>
+      <select class="price-filter-button map-filter">
+        <option value="base">Base Floor</option>
+        <option value="upper">Upper Floor</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <%= 
+      inline_svg('qe_theatre.svg', {class: "qe-seating-chart lower"}) 
+    %>
+    <%= 
+      inline_svg('qe_upper.svg', {class: "magictimeHalfSec qe-seating-chart upper"})
+    %>
+    <div class="text-box-bubble" style="position: absolute;">
+    </div>
+  </main>
+
+  <aside>
+    <div class="selected-seat-box">
+      <div class="selected-seat-info">
+        When I was young, I would listen to the radio.
+      </div>
+      <div class="selected-seat-info">
+        When they play, I would sing along; it makes me smile.
+      </div>
+    </div>
+  </aside>
+
+</div>

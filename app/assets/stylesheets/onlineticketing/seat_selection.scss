@@ -1,0 +1,106 @@
+$header_width: 77%;
+$header_height: 22%;
+
+@function subtractionPerc($var) {
+  @return (100% - $var);
+}
+
+@mixin paddingLeftRight($x) {
+  padding-left: $x;
+  padding-right: $x;
+}
+
+@mixin magicTimer($x) {
+  -webkit-animation-duration: $x;
+  -moz-animation-duration: $x;
+  -o-animation-duration: $x;
+  animation-duration: $x;
+}
+
+
+.magictimeHalfSec {
+  @include magicTimer(0.5s);
+}
+
+.seat-selection-page {
+  header {
+    position: fixed;
+    background: pink;
+    top: 0px;
+    left: 0px;
+    width: $header_width;
+    height: $header_height;
+    .event-name {
+      position: relative;
+      text-align: center;
+      top: -5px;
+      margin-bottom: 5px;
+    }
+    .price-filter-box {
+      @include paddingLeftRight(0.5%);
+      position: relative;
+      background: black;
+      width: 100%;
+      height: 42%;
+      .price-filter-button {
+        font-size: 130%;
+        top: 15%;
+        position: relative;
+        background: purple;
+        width: auto;
+        height: auto;
+      }
+    }
+  }
+
+  main {
+    position: absolute;
+    background: antiquewhite;
+    top: $header_height;
+    width: $header_width;
+    height: subtractionPerc($header_height);
+    left: 0%;
+    overflow: scroll;
+    .qe-seating-chart {
+      position: absolute;
+      transition: opacity 0.5s, z-index 0.5s;
+    }
+    .upper {
+      opacity: 0;
+      z-index: -1;
+    }
+    .lower {
+      opacity: 1;
+      z-index: 5;
+    }
+  }
+
+  aside {
+    position: fixed;
+    background: red;
+    width: subtractionPerc($header_width);
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    .selected-seat-box {
+      @include paddingLeftRight(2.5%);
+      position: relative;
+      top: $header_height;
+      width: 100%;
+      height: subtractionPerc($header_height);
+      background-color: blueviolet;
+      padding-top: 2%;
+      overflow: scroll;
+      .selected-seat-info {
+        width: 95%;
+        position: relative;
+        height: 50px;
+        background-color: lavender;
+        margin-bottom: 2%;
+        box-sizing: border-box;
+        padding-top: 2.5%;
+        text-align: center;
+      }
+    }
+  }
+}

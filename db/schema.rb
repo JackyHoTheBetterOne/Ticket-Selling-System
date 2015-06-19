@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617230405) do
+ActiveRecord::Schema.define(version: 20150618204955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,28 +66,34 @@ ActiveRecord::Schema.define(version: 20150617230405) do
     t.string   "section"
     t.string   "aasm_state"
     t.string   "name"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "event_id"
     t.float    "price",      default: 99.99
     t.integer  "level",      default: 1
     t.integer  "ticket_id"
-    t.string   "type",       default: "R"
     t.float    "x_coor"
+    t.string   "seat_type",  default: "Regular"
   end
 
   add_index "seats", ["event_id"], name: "index_seats_on_event_id", using: :btree
 
+  create_table "ticket_packages", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tickets", force: :cascade do |t|
     t.integer  "seat_id"
     t.text     "barcode"
-    t.string   "email"
-    t.string   "name"
     t.datetime "scan_time"
     t.string   "aasm_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "event_id"
+    t.integer  "ticket_package_id"
   end
 
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree

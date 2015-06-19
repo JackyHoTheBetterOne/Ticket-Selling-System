@@ -6,6 +6,7 @@ class Ticket < ActiveRecord::Base
 ########################################################## Relationships
   belongs_to :seat
   belongs_to :event
+  belongs_to :ticket_package
 
  
 ########################################################## SQL queries

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EventsControllerTest < ActionController::TestCase
+class TicketPackageTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
