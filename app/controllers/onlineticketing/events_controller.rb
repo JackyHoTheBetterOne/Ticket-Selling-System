@@ -13,21 +13,21 @@ class Onlineticketing::EventsController < ApplicationController
 
     selector.call()
 
-    if selector.result
-      # @selected_seats = selector.seat_selection
-      render text: 'Good to go'
-    else
-      # redirect_to seat_view_onlineticketing_event_path(@event)
-      render text: 'Nope'
-    end
+    checker = Event::SeatAvailabilityChecker.new({
+                event_id: @event.id,
+                seat_selection: params[:seat_selection],
+                rules_broken: !selector.result
+              })
+
+    checker.check_and_update()
+
+    render json: checker.invalid_seat_object
   end
 
   def seat_update
     find_event()
     @seats = @event.seats
   end
-
-
 
 
   private

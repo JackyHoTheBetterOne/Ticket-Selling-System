@@ -84,7 +84,7 @@ $header_height: 22%;
     right: 0px;
     .selected-seat-box {
       @include paddingLeftRight(2.5%);
-      position: relative;
+      position: absolute;
       top: $header_height;
       width: 100%;
       height: subtractionPerc($header_height);
