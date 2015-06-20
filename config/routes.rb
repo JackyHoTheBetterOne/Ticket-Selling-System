@@ -12,6 +12,8 @@ Rails.application.routes.draw do
         get :seat_update
         get :seat_view
         post :seat_selection
+        post :seat_purchase
+        post :seat_unhold
       end
     end
   end

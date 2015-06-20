@@ -54,6 +54,6 @@ class Seat < ActiveRecord::Base
 
 ############################################################## Methods
   def make_name
-    self.name = self.row + self.column
+    self.name = self.row + "-" + self.column
   end
 end

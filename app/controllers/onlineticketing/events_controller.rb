@@ -29,6 +29,36 @@ class Onlineticketing::EventsController < ApplicationController
     @seats = @event.seats
   end
 
+  def seat_purchase
+    find_event()
+
+    purchaser = Event::SeatPurchaser.new({
+                  event_id: @event.id,
+                  customer_email: params[:email],
+                  # customer_name: params[:name],
+                  seat_selection: params[:seat_selection],
+                  stripe_token: params[:stripe_token]
+                })
+
+    purchaser.call()
+
+    render text: purchaser.is_successful.to_s
+
+  end
+
+  def seat_unhold
+    find_event()
+
+    unholder= Event::SeatUnholder.new({
+                seat_selection: params[:seat_selection],
+                event_id: @event.id
+              })
+
+    unholder.call()
+
+    render nothing: true
+  end
+
 
   private
 

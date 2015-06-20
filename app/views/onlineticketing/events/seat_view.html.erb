@@ -1,6 +1,8 @@
+<script src="https://checkout.stripe.com/checkout.js"></script>
 <div class="seat-selection-page">
   <header>
-    <h4 class="event-name" id="event-name" data-name="<%= @event.name %>">
+    <h4 class="event-name" id="event-name" 
+      data-name="<%= @event.name %>">
       <%= @event.name %> - <%= @event.show_date  %>
     </h4>
     <div class="price-filter-box">
@@ -17,10 +19,12 @@
 
   <main>
     <%= 
-      inline_svg('qe_theatre.svg', {class: "qe-seating-chart lower"}) 
+      inline_svg('qe_theatre.svg', 
+        {class: "qe-seating-chart lower"}) 
     %>
     <%= 
-      inline_svg('qe_upper.svg', {class: "magictimeHalfSec qe-seating-chart upper"})
+      inline_svg('qe_upper.svg', 
+        {class: "magictimeHalfSec qe-seating-chart upper"})
     %>
     <div class="text-box-bubble" style="position: absolute;">
     </div>

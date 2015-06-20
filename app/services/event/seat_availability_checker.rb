@@ -25,6 +25,14 @@ class Event::SeatAvailabilityChecker
         @invalid_seat_object["seats_to_remove"].push(s.name)
       end
     end
+
+    if !@invalid_seat_object["rules_broken"] && @invalid_seat_object["seats_to_remove"].length == 0
+      @seat_selection.each do |s|
+        s.holding
+        s.save
+      end
+    end
+
     return @invalid_seat_object
   end
 end

@@ -5,7 +5,7 @@
 $ ->
   $('circle').each ->
     id = undefined
-    id = $(this).data('row').toString() + $(this).data('column').toString()
+    id = $(this).data('row').toString() + "-" + $(this).data('column').toString()
     $(this).attr 'id', id
   SEAT_SELECTOR = ((global, $) ->
     circle_mouseover_color = '#696969'
@@ -17,12 +17,42 @@ $ ->
     event_name = $("#event-name").data("name")
     map_container = $(".seat-selection-page main")
     price_filter = $(".price-filter")[0]
+    submit_form = $(".ticket-checkout-form")[0]
     selected_seat_container = $(".selected-seat-box")[0]
     selected_seats = []
     namespace = '/onlineticketing/events/'
     appearance_css_obj = {'opacity':'1', 'z-index':'5'}
     disappearance_css_obj = {'opacity':'0', 'z-index':'-1'}
+    stripe_key = 'pk_test_X0QOzTREgDolYkv9Nxysjlre'
     map_select_timer = undefined
+    stripe_handler = 
+      StripeCheckout.configure
+        name: 'Spring Show'
+        description: 'Spring Show'
+        currency: 'cad'
+        key: stripe_key
+        token: (token) ->
+          purchase_obj = {}
+          purchase_obj.stripe_token = token.id
+          purchase_obj.email = token.email
+          purchase_obj.seat_selection = transform_seat_array(selected_seats)
+          purchase_seats(purchase_obj)
+          return
+        closed: () ->
+          unhold_obj = {}
+          unhold_obj.seat_selection = transform_seat_array(selected_seats)
+          unhold_seats(unhold_obj)
+          return
+    transform_seat_array = (array) ->
+      i = 0
+      length = array.length
+      params_obj = []
+      while i < length
+        seat = array[i]
+        seat_name = $(seat).attr("id")
+        params_obj.push(seat_name)
+        i++
+      return params_obj
     seat_class_recontruction = (circle) ->
       basic_klass = "seat-circle"
       row_klass = "row-" + $(circle).data('row')
@@ -30,7 +60,7 @@ $ ->
       return basic_klass + " " + row_klass + " " + column_klass
     create_selected_seat_box = (object) ->
       seat_box = document.createElement('div')
-      id = "selected-" + object.row + object.column
+      id = "selected-" + object.row + "-" + object.column
       seat_box.setAttribute('class', 'selected-seat-info')
       seat_box.innerHTML = "Row:" + object.row + ", Column " + object.column
       seat_box.setAttribute('id', id)
@@ -42,10 +72,55 @@ $ ->
       return option
     get_default_color = (circle) ->
       klass = $(circle).attr("class")
-      if klass.indexOf("filtered") is -1
+      if check_if_seat_not_filtered(klass)
         return circle_original_color
       else
         return circle_filtered_color
+    check_if_ticket_available = (klass) ->
+      klass.indexOf('selected-seat') is -1 and klass.indexOf('taken-seat') is -1
+    check_if_ticket_not_selected = (klass) ->
+      klass.indexOf('selected-seat') is -1
+    check_if_ticket_not_taken = (klass) ->
+      klass.indexOf('taken-seat') is -1
+    check_if_seat_not_filtered = (klass) ->
+      klass.indexOf("filtered") is -1
+    remove_selected_seat = (base_id) ->
+      circle = document.getElementById(base_id)
+      index = selected_seats.indexOf(seat)
+      circle_klass = circle.getAttribute("class")
+      box_id = "#selected-" + base_id 
+      new_klass = circle_klass.replace("selected-seat", "taken-seat")
+      circle.setAttribute("class", new_klass)
+      selected_seats.splice(index, 1)
+      $(box_id).remove()
+    make_strip_button = (amount) ->
+      script = document.createElement("script")
+      key = submit_form.getAttribute("data-key")
+      script.setAttribute("src", "https://checkout.stripe.com/checkout.js")
+      script.setAttribute("class", "stripe-button")
+      script.setAttribute("data-key", key)
+      script.setAttribute("data-description", "Spring Show")
+      script.setAttribute("data-amount", amount)
+      script.setAttribute("class", "stripe-script stripe-button active")
+      return script
+    purchase_seats = (data) ->
+      $.ajax
+        url: namespace + event_name + "/seat_purchase"
+        method: "POST"
+        data: data
+        success: (response) ->
+          console.log(response)
+        error: ->
+          console.log("Cannot complete the payment")
+    unhold_seats = (data) ->
+      $.ajax
+        url: namespace + event_name + "/seat_unhold"
+        method: "POST"
+        data: data
+        success: (response) ->
+          console.log("Seats unheld")
+        error: ->
+          console.log("Cannot unhold the seats")
     return {
       events: {
         circle_mouseenter: (event) ->
@@ -63,15 +138,15 @@ $ ->
         circle_mouseleave: (event) ->
           circle = this
           klass = $(circle).attr('class')
-          if klass.indexOf('selected-seat') is -1 and klass.indexOf('taken-seat') is -1
+          if check_if_ticket_available(klass)
             $(circle).attr('fill', get_default_color(circle)) 
           window.clearTimeout(SEAT_SELECTOR.timer)
           $(box).css({"opacity":"0", 'z-index': '-1'})
         circle_click: (event) ->
           circle = this
           klass = $(circle).attr('class')
-          if klass.indexOf('taken-seat') is -1
-            if klass.indexOf('selected-seat') is -1
+          if check_if_ticket_not_taken(klass)
+            if check_if_ticket_not_selected(klass)
               $(circle).attr('class', klass + " selected-seat")
               selected_seats.push(circle)
               box_fields = {
@@ -81,22 +156,16 @@ $ ->
               selected_seat_container.appendChild(
                 create_selected_seat_box(box_fields)
               )
+              console.log(selected_seats)
             else
               $(circle).attr('class', seat_class_recontruction(circle))
               $(circle).attr('fill', get_default_color(circle))
               index = selected_seats.indexOf(circle)
-              id = "#selected-" + $(circle).data("row") + $(circle).data("column")
+              id = "#selected-" + $(circle).attr("id")
               selected_seats.splice(index,1)
               $(id).remove()
         submit_seats: (event) ->
-          i = 0
-          length = selected_seats.length
-          params_obj = []
-          while i < length
-            seat = selected_seats[i]
-            seat_name = $(seat).data("row").toString() + $(seat).data("column").toString()
-            params_obj.push(seat_name)
-            i++
+          params_obj = transform_seat_array(selected_seats)
           $.ajax
             url: namespace + event_name + "/seat_selection"
             method: "post"
@@ -104,7 +173,6 @@ $ ->
               seat_selection: params_obj
             }
             success: (response) ->
-              console.log(response)
               if !response.rules_broken
                 seat_array = response.seats_to_remove
                 array_length = seat_array.length
@@ -112,25 +180,22 @@ $ ->
                 if array_length != 0 
                   i = 0
                   while i < array_length
-                    console.log(seat_array)
                     base_id = seat_array[i]
-                    console.log(base_id)
-                    circle = document.getElementById(base_id)
-                    console.log(seat)
-                    index = selected_seats.indexOf(seat)
-                    console.log(index)
-                    circle_klass = circle.getAttribute("class")
-                    box_id = "#selected-" + base_id 
-                    new_klass = circle_klass.replace("selected-seat", "taken-seat")
-                    circle.setAttribute("class", new_klass)
-                    selected_seats.splice(index, 1)
-                    $(box_id).remove()
+                    remove_selected_seat(base_id)
                     i++
+                else 
+                  amount = 0
+                  i = 0
+                  length = selected_seats.length
+                  while i < length
+                    amount += parseFloat(selected_seats[i].getAttribute("data-price"))
+                    i++
+                  stripe_handler.open
+                    amount: (amount*100).toFixed(2)
               else 
                 console.log("nope")
             error: () ->
               alert('Cannot send the seat selection')
-
         switch_map: (event) ->
           value = this.value
           upper_klass = $(".upper").attr("class")
@@ -165,14 +230,14 @@ $ ->
             circle = circles[i]
             seat_price = circle.getAttribute("data-price")
             klass = circle.getAttribute("class")
-            if parseFloat(seat_price) is parseFloat(price) && klass.indexOf('taken-seat') is -1
-              circle.setAttribute("class", klass+=' filtered') if klass.indexOf("filtered") is -1
-              circle.setAttribute("fill", circle_filtered_color)
-            else
-              circle.setAttribute("class", klass.replace("filtered", "")) if klass.indexOf("filtered") isnt -1
-              circle.setAttribute("fill", circle_original_color)
+            if check_if_ticket_available(klass)
+              if parseFloat(seat_price) is parseFloat(price)
+                circle.setAttribute("class", klass+=' filtered') if check_if_seat_not_filtered(klass)
+                circle.setAttribute("fill", circle_filtered_color)
+              else
+                circle.setAttribute("class", klass.replace("filtered", "")) if !check_if_seat_not_filtered(klass)
+                circle.setAttribute("fill", circle_original_color)
             i++
-
       },
       update_seating_chart: ->
         price_array = []
