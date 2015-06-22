@@ -64,6 +64,9 @@ $header_height: 22%;
     .qe-seating-chart {
       position: absolute;
       transition: opacity 0.5s, z-index 0.5s;
+      width: 965px;
+      height: 1249px;
+      left: -5px;
     }
     .upper {
       opacity: 0;

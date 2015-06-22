@@ -131,7 +131,7 @@ $ ->
             # scrollTop = $(map_container).scrollTop()
             cX = position.left
             cY = position.top
-            x = cX - 22
+            x = cX - 25.5
             y = cY - 67
             $(box).css({top:y, left: x, opacity: 1, 'z-index': 5})
           ), 500
