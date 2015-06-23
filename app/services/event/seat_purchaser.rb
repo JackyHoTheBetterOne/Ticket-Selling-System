@@ -10,7 +10,7 @@ class Event::SeatPurchaser
   def initialize(options={})
     @event_id = options[:event_id]
     @customer_email = options[:customer_email]
-    # @customer_name = options[:customer_name]
+    @customer_name = options[:customer_name]
     @stripe_token = options[:stripe_token]
     @seat_selection = Seat.find_available_seats_by_name(
                         @event_id, options[:seat_selection])
@@ -25,7 +25,6 @@ class Event::SeatPurchaser
       amount += s.price_group.price
       is_valid = false if s.aasm_state != 'onhold'
     end
-
     if is_valid
       customer = Stripe::Customer.create(
         email: @customer_email,
@@ -38,6 +37,17 @@ class Event::SeatPurchaser
         description: 'Spring Show',
         currency: 'CAD'
       )
+
+      t = TicketPackage.create(email: @customer_email,
+                                name: @customer_name)
+
+      @seat_selection.each do |s|
+        t = Ticket.new(event_id: @event_id, 
+                        seat_id: s.id,
+                        ticket_package_id: t.id)
+        t.add_code
+        t.save
+      end
     else
       @is_successful = false
     end

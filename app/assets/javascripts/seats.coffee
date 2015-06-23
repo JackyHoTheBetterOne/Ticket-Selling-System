@@ -13,6 +13,7 @@ $ ->
     circle_filtered_color = '#551A8B'
     svg = $(".qe-seating-chart")
     box = $(".text-box-bubble")
+    payment_model = $(".payment-overlay")
     overlay = $(".seats-loading-overlay")
     event_name = $("#event-name").data("name")
     map_container = $(".seat-selection-page main")
@@ -23,26 +24,30 @@ $ ->
     namespace = '/onlineticketing/events/'
     appearance_css_obj = {'opacity':'1', 'z-index':'5'}
     disappearance_css_obj = {'opacity':'0', 'z-index':'-1'}
-    stripe_key = 'pk_test_X0QOzTREgDolYkv9Nxysjlre'
     map_select_timer = undefined
-    stripe_handler = 
-      StripeCheckout.configure
-        name: 'Spring Show'
-        description: 'Spring Show'
-        currency: 'cad'
-        key: stripe_key
-        token: (token) ->
-          purchase_obj = {}
-          purchase_obj.stripe_token = token.id
-          purchase_obj.email = token.email
-          purchase_obj.seat_selection = transform_seat_array(selected_seats)
-          purchase_seats(purchase_obj)
-          return
-        closed: () ->
-          unhold_obj = {}
-          unhold_obj.seat_selection = transform_seat_array(selected_seats)
-          unhold_seats(unhold_obj)
-          return
+    # stripe_handler = 
+    #   StripeCheckout.configure
+    #     name: 'Spring Show'
+    #     description: 'Spring Show'
+    #     currency: 'cad'
+    #     key: stripe_key
+    #     token: (token) ->
+    #       purchase_obj = {}
+    #       purchase_obj.stripe_token = token.id
+    #       purchase_obj.email = token.email
+    #       purchase_obj.seat_selection = transform_seat_array(selected_seats)
+    #       purchase_seats(purchase_obj)
+    #       return
+    #     closed: () ->
+    #       unhold_obj = {}
+    #       unhold_obj.seat_selection = transform_seat_array(selected_seats)
+    #       unhold_seats(unhold_obj)
+    #       return
+    change_svg_size = (num) ->
+      scale = parseFloat($(svg).data("scale"))
+      scale = scale*num
+      $(svg).css('transform', 'scale(' + scale.toString() + ')')
+      $(svg).data("scale", scale)
     transform_seat_array = (array) ->
       i = 0
       length = array.length
@@ -93,34 +98,25 @@ $ ->
       circle.setAttribute("class", new_klass)
       selected_seats.splice(index, 1)
       $(box_id).remove()
-    make_strip_button = (amount) ->
-      script = document.createElement("script")
-      key = submit_form.getAttribute("data-key")
-      script.setAttribute("src", "https://checkout.stripe.com/checkout.js")
-      script.setAttribute("class", "stripe-button")
-      script.setAttribute("data-key", key)
-      script.setAttribute("data-description", "Spring Show")
-      script.setAttribute("data-amount", amount)
-      script.setAttribute("class", "stripe-script stripe-button active")
-      return script
-    purchase_seats = (data) ->
-      $.ajax
-        url: namespace + event_name + "/seat_purchase"
-        method: "POST"
-        data: data
-        success: (response) ->
-          console.log(response)
-        error: ->
-          console.log("Cannot complete the payment")
-    unhold_seats = (data) ->
-      $.ajax
-        url: namespace + event_name + "/seat_unhold"
-        method: "POST"
-        data: data
-        success: (response) ->
-          console.log("Seats unheld")
-        error: ->
-          console.log("Cannot unhold the seats")
+    # make_strip_button = (amount) ->
+    #   script = document.createElement("script")
+    #   key = submit_form.getAttribute("data-key")
+    #   script.setAttribute("src", "https://checkout.stripe.com/checkout.js")
+    #   script.setAttribute("class", "stripe-button")
+    #   script.setAttribute("data-key", key)
+    #   script.setAttribute("data-description", "Spring Show")
+    #   script.setAttribute("data-amount", amount)
+    #   script.setAttribute("class", "stripe-script stripe-button active")
+    #   return script
+    # unhold_seats = (data) ->
+    #   $.ajax
+    #     url: namespace + event_name + "/seat_unhold"
+    #     method: "POST"
+    #     data: data
+    #     success: (response) ->
+    #       console.log("Seats unheld")
+    #     error: ->
+    #       console.log("Cannot unhold the seats")
     return {
       events: {
         circle_mouseenter: (event) ->
@@ -131,8 +127,8 @@ $ ->
             # scrollTop = $(map_container).scrollTop()
             cX = position.left
             cY = position.top
-            x = cX - 25.5
-            y = cY - 67
+            x = cX - 21
+            y = cY - 77
             $(box).css({top:y, left: x, opacity: 1, 'z-index': 5})
           ), 500
         circle_mouseleave: (event) ->
@@ -156,7 +152,6 @@ $ ->
               selected_seat_container.appendChild(
                 create_selected_seat_box(box_fields)
               )
-              console.log(selected_seats)
             else
               $(circle).attr('class', seat_class_recontruction(circle))
               $(circle).attr('fill', get_default_color(circle))
@@ -190,8 +185,7 @@ $ ->
                   while i < length
                     amount += parseFloat(selected_seats[i].getAttribute("data-price"))
                     i++
-                  stripe_handler.open
-                    amount: (amount*100).toFixed(2)
+                  $(payment_model).css(appearance_css_obj)
               else 
                 console.log("nope")
             error: () ->
@@ -238,6 +232,13 @@ $ ->
                 circle.setAttribute("class", klass.replace("filtered", "")) if !check_if_seat_not_filtered(klass)
                 circle.setAttribute("fill", circle_original_color)
             i++
+        zoom_in: (event) ->
+          change_svg_size(1.05)
+        zoom_out: (event) ->  
+          change_svg_size(0.95)
+        zoom_off: (event) ->
+          $(svg).css("transform", 'scale(1)')
+          $(svg).data("scale", 1)
       },
       update_seating_chart: ->
         price_array = []
@@ -281,5 +282,8 @@ $ ->
   $(".map-filter").on('change.change_map', SEAT_SELECTOR.events.switch_map)
   $(".price-filter").on("change.change_price", SEAT_SELECTOR.events.filter_price)
   SEAT_SELECTOR.update_seating_chart()
+  $(".zoom-in").on("click.zoom_in", SEAT_SELECTOR.events.zoom_in)
+  $(".zoom-out").on("click.zoom_out", SEAT_SELECTOR.events.zoom_out)
+  $(".zoom-off").on("click.zoom_off", SEAT_SELECTOR.events.zoom_off)
 
 

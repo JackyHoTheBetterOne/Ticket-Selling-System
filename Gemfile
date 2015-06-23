@@ -11,6 +11,7 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'mandrill-api'
 gem 'figaro'
 gem 'haml'
+gem 'delayed_job_active_record'
 
 
 

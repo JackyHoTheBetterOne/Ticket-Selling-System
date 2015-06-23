@@ -30,6 +30,7 @@ class Event::SeatAvailabilityChecker
       @seat_selection.each do |s|
         s.holding
         s.save
+        s.check_and_update_seat_status
       end
     end
 

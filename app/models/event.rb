@@ -17,7 +17,8 @@ class Event < ActiveRecord::Base
 
 
 ########################################################## SQL queries
-    scope :upcoming, -> { sort_by(aasm_state)
+  scope :upcoming, -> { 
+    sort_by(aasm_state)
   }
 
 

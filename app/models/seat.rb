@@ -56,4 +56,14 @@ class Seat < ActiveRecord::Base
   def make_name
     self.name = self.row + "-" + self.column
   end
+
+  def check_and_update_seat_status
+    if self.aasm_state == 'onhold'
+      self.unholding
+      self.save
+    end
+  end
+  handle_asynchronously :check_and_update_seat_status, :run_at => Proc.new { 6.minutes.from_now }
 end
+
+

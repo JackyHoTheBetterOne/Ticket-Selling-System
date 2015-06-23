@@ -34,8 +34,8 @@ class Onlineticketing::EventsController < ApplicationController
 
     purchaser = Event::SeatPurchaser.new({
                   event_id: @event.id,
-                  customer_email: params[:email],
-                  # customer_name: params[:name],
+                  customer_email: params[:customer_email],
+                  customer_name: params[:customer_name],
                   seat_selection: params[:seat_selection],
                   stripe_token: params[:stripe_token]
                 })
