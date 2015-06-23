@@ -69,7 +69,7 @@ $ ->
         return
     }
   )(window, jQuery, Stripe)
-
+  
   $("#submit-seat-payment").on "click", (event) ->
     event.preventDefault()
     STRIPE_PAYMENT.payment_event()

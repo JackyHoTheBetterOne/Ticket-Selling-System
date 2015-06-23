@@ -1,7 +1,3 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
 $ ->
   $('circle').each ->
     id = undefined
@@ -14,35 +10,18 @@ $ ->
     svg = $(".qe-seating-chart")
     box = $(".text-box-bubble")
     payment_model = $(".payment-overlay")
-    overlay = $(".seats-loading-overlay")
+    overlay = $(".welcome-overlay")
     event_name = $("#event-name").data("name")
     map_container = $(".seat-selection-page main")
-    price_filter = $(".price-filter")[0]
+    price_filters = document.getElementsByClassName("price-filter")
     submit_form = $(".ticket-checkout-form")[0]
     selected_seat_container = $(".selected-seat-box")[0]
+    welcome_box = $(".welcome-box")[0]
     selected_seats = []
     namespace = '/onlineticketing/events/'
     appearance_css_obj = {'opacity':'1', 'z-index':'5'}
     disappearance_css_obj = {'opacity':'0', 'z-index':'-1'}
     map_select_timer = undefined
-    # stripe_handler = 
-    #   StripeCheckout.configure
-    #     name: 'Spring Show'
-    #     description: 'Spring Show'
-    #     currency: 'cad'
-    #     key: stripe_key
-    #     token: (token) ->
-    #       purchase_obj = {}
-    #       purchase_obj.stripe_token = token.id
-    #       purchase_obj.email = token.email
-    #       purchase_obj.seat_selection = transform_seat_array(selected_seats)
-    #       purchase_seats(purchase_obj)
-    #       return
-    #     closed: () ->
-    #       unhold_obj = {}
-    #       unhold_obj.seat_selection = transform_seat_array(selected_seats)
-    #       unhold_seats(unhold_obj)
-    #       return
     change_svg_size = (num) ->
       scale = parseFloat($(svg).data("scale"))
       scale = scale*num
@@ -98,25 +77,6 @@ $ ->
       circle.setAttribute("class", new_klass)
       selected_seats.splice(index, 1)
       $(box_id).remove()
-    # make_strip_button = (amount) ->
-    #   script = document.createElement("script")
-    #   key = submit_form.getAttribute("data-key")
-    #   script.setAttribute("src", "https://checkout.stripe.com/checkout.js")
-    #   script.setAttribute("class", "stripe-button")
-    #   script.setAttribute("data-key", key)
-    #   script.setAttribute("data-description", "Spring Show")
-    #   script.setAttribute("data-amount", amount)
-    #   script.setAttribute("class", "stripe-script stripe-button active")
-    #   return script
-    # unhold_seats = (data) ->
-    #   $.ajax
-    #     url: namespace + event_name + "/seat_unhold"
-    #     method: "POST"
-    #     data: data
-    #     success: (response) ->
-    #       console.log("Seats unheld")
-    #     error: ->
-    #       console.log("Cannot unhold the seats")
     return {
       events: {
         circle_mouseenter: (event) ->
@@ -124,7 +84,6 @@ $ ->
           $(circle).attr('fill', circle_mouseover_color)
           SEAT_SELECTOR.timer = setTimeout (->
             position = $(circle).position()
-            # scrollTop = $(map_container).scrollTop()
             cX = position.left
             cY = position.top
             x = cX - 21
@@ -224,6 +183,10 @@ $ ->
             circle = circles[i]
             seat_price = circle.getAttribute("data-price")
             klass = circle.getAttribute("class")
+            if $(overlay).css("opacity") is "1"
+              setTimeout (->
+                $(overlay).css(disappearance_css_obj)
+              ), 1000
             if check_if_ticket_available(klass)
               if parseFloat(seat_price) is parseFloat(price)
                 circle.setAttribute("class", klass+=' filtered') if check_if_seat_not_filtered(klass)
@@ -260,14 +223,22 @@ $ ->
                 circle.setAttribute('class', new_klass)
                 circle.setAttribute('fill', circle_mouseover_color)
               i++
-            $(overlay).css(disappearance_css_obj)
+            # $(overlay).css(disappearance_css_obj)
             i = 0
-            length = price_array.length
+            length = price_filters.length
             while i < length
-              price = price_array[i]
-              option = create_price_filter_option(price)
-              price_filter.appendChild(option)
+              filter = price_filters[i]
+              index = 0
+              while index < price_array.length
+                price = price_array[index]
+                option = create_price_filter_option(price)
+                filter.appendChild(option)
+                index++
               i++
+            welcome_klass = welcome_box.getAttribute("class")
+            welcome_klass += " perspectiveUpRetourn"
+            welcome_box.setAttribute("class", welcome_klass)
+            $(welcome_box).css("opacity", "1")
           error: () ->
             alert("Cannot updated seats!")
     }
@@ -285,5 +256,6 @@ $ ->
   $(".zoom-in").on("click.zoom_in", SEAT_SELECTOR.events.zoom_in)
   $(".zoom-out").on("click.zoom_out", SEAT_SELECTOR.events.zoom_out)
   $(".zoom-off").on("click.zoom_off", SEAT_SELECTOR.events.zoom_off)
+
 
 

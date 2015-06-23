@@ -6,7 +6,7 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  background: rgba(25,25,25,0.95);
+  background: rgba(25,25,25,0.97);
   top: 0px;
   left: 0px;
   opacity: 0;
@@ -23,8 +23,6 @@
 
 .seats-loading-overlay {
   @extend %overlay;
-  opacity: 1;
-  z-index: 10;
 }
 
 .payment-overlay {
@@ -34,6 +32,19 @@
     background-color: wheat;
     text-align: center;
     padding: 15px;
+  }
+}
+
+.welcome-overlay {
+  @extend %overlay;
+  opacity: 1;
+  z-index: 10;
+  .welcome-box {
+    @include centering(5%);
+    background-color: wheat;
+    text-align: center;
+    padding: 15px;
+    opacity: 0;
   }
 }
 
