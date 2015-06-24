@@ -18,15 +18,22 @@ class Ticket < ActiveRecord::Base
 ########################################################## AASM states
   aasm do
     state :valid, :initial => true 
+
+    event :scanning do 
+      transitions :from => :valid, :to => :scanned
+    end
+
+
   end
 
 
 ############################################################## Methods
   def add_code
-    self["barcode"] = rand(9999999999).to_s.center(20, rand(9).to_s) 
-    if Ticket.find_ticket_by_barcode(self.event_id, self.unique_code).first
+    o = [('a'..'z'), (0..9), ('A'..'Z'), (0..9)].map { |i| i.to_a }.flatten
+    string = (0..19).map { o[rand(o.length)] }.join
+    self["barcode"] = string
+    if Ticket.find_ticket_by_barcode(self.event_id, self.barcode).first
       add_code()
     end
   end
-
 end

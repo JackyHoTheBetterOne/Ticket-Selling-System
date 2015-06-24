@@ -8,12 +8,15 @@ Rails.application.routes.draw do
 
   namespace :onlineticketing do
     resources :events, only: [] do
+      
       member do
         get :seat_update
         get :seat_view
+        get :event_listing
         post :seat_selection
         post :seat_purchase
         post :seat_unhold
+        post :ticket_scan
       end
     end
   end

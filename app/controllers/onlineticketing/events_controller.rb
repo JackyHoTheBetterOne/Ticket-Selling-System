@@ -59,10 +59,31 @@ class Onlineticketing::EventsController < ApplicationController
     render nothing: true
   end
 
+  def ticket_scan
+    allowance()
+
+    scanner = TicketScanner.new({
+                event_name: params[:event_name],
+                barcode: params[:barcode]
+              })
+
+    render json: scanner.call()
+  end
+
+  def event_listing
+    @events = Event.all
+  end
+
 
   private
 
   def find_event()
     @event = Event.friendly.find(params[:id])
+  end
+
+  def allowance()
+    if request.format == "application/json"
+      response.headers["Access-Control-Allow-Origin"] = "*"
+    end
   end
 end

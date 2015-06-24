@@ -21,6 +21,10 @@ class Event < ActiveRecord::Base
     sort_by(aasm_state)
   }
 
+  scope :available, -> {
+    where(aasm_state: 'upcoming')
+  }
+
 
 ########################################################## AASM states
   aasm do
