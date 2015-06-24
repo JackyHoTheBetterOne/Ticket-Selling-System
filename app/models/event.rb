@@ -25,7 +25,6 @@ class Event < ActiveRecord::Base
     where(aasm_state: 'upcoming')
   }
 
-
 ########################################################## AASM states
   aasm do
     state :planning, :initial => true
