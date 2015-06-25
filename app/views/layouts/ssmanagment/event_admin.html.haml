@@ -6,4 +6,10 @@
     = javascript_include_tag 'ssmanagment/base', 'data-turbolinks-track' => false
     = csrf_meta_tags
   %body
+    -if flash[:notice]
+      .alert.alert-success
+        =flash[:notice]
+    -elsif flash[:alert]
+      .alert.alert-danger
+        =flash[:alert]
     = yield

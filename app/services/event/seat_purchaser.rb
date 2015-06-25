@@ -17,10 +17,10 @@ class Event::SeatPurchaser
   end
 
   def call()
-    amount = 0  
+    amount = 0
     @is_successful = true
     is_valid = true
-    
+
     @seat_selection.each do |s|
       amount += s.price_group.price
       is_valid = false if s.aasm_state != 'onhold'
@@ -42,17 +42,17 @@ class Event::SeatPurchaser
                                 name: @customer_name)
 
       @seat_selection.each do |s|
-        t = Ticket.new(event_id: @event_id, 
+        t = Ticket.new(event_id: @event_id,
                         seat_id: s.id,
                         ticket_package_id: t.id)
-        t.add_code
+        t.add_code_and_image
         t.save
       end
     else
       @is_successful = false
     end
 
-  rescue Stripe::CardError => e 
+  rescue Stripe::CardError => e
     @is_successful = false
     @error_message = e.message
   end

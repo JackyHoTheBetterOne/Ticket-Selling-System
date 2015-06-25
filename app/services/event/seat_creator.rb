@@ -3,6 +3,8 @@ class Event::SeatCreator
   attr_reader :seat_xcoor_obj
 
   def initialize(options = {})
+    @event_id = options[:event_id]
+
     @seat_column_obj = {
       "1" => ["120","119","181","180","56","55","54","53","52","51","50","49","48","47","46","45","44","43","42","41","40","39","38","37","36","35","34","33","32","31","69","68","67","66","65","64","63","62","61","60"],
       "2" => ["120","119","118","182","181","180","56","55","54","53","52","51","50","49","48","47","46","45","44","43","42","41","40","39","38","37","36","35","34","33","32","31","69","68","67","66","65","64","63","62","61","60"],
@@ -90,14 +92,14 @@ class Event::SeatCreator
 
   end
 
-  def make_seats(event_id)
+  def make_seats()
     ActiveRecord::Base.transaction do
       @seat_column_obj.each do |row, column_array|
         column_array.each do |c|
           index = column_array.index(c)
           x_coor = @seat_xcoor_obj[row][index].to_f
-          s = Seat.new(row: row, column: c, 
-                        event_id: event_id, x_coor: x_coor)
+          s = Seat.new(row: row, column: c,
+                        event_id: @event_id, x_coor: x_coor)
           s.make_name
           s.save
         end

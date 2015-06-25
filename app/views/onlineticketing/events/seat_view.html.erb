@@ -1,7 +1,7 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <div class="seat-selection-page">
   <header>
-    <h4 class="event-name" id="event-name" 
+    <h4 class="event-name" id="event-name"
       data-name="<%= @event.name %>">
       <%= @event.name %> - <%= @event.show_date  %>
     </h4>
@@ -18,12 +18,12 @@
   </header>
 
   <main>
-    <%= 
-      inline_svg('qe_theatre.svg', 
-        {class: "qe-seating-chart lower", data: {scale: 1}}) 
+    <%=
+      inline_svg('qe_theatre.svg',
+        {class: "qe-seating-chart lower", data: {scale: 1}})
     %>
-    <%= 
-      inline_svg('qe_upper.svg', 
+    <%=
+      inline_svg('qe_upper.svg',
         {class: "magictimeHalfSec qe-seating-chart upper", data: {scale: 1}})
     %>
     <div class="text-box-bubble" style="position: absolute;">

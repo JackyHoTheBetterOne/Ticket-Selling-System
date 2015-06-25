@@ -3,3 +3,4 @@
 //= require ./initialize
 //= require ./routes
 //= require ./controllers
+//= require bootstrap-sprockets

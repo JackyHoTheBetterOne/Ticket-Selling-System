@@ -10,14 +10,14 @@ class Event < ActiveRecord::Base
 
 ########################################################## Relationships
   has_many :seats, dependent: :destroy
-  has_many :priced_seats, dependent: :destroy
+  has_many :price_groups, dependent: :destroy
   has_many :priced_seats, through: :price_groups, source: :seats
   has_many :tickets, through: :seats, dependent: :destroy
   has_many :ticket_packages, through: :tickets
 
 
 ########################################################## SQL queries
-  scope :upcoming, -> { 
+  scope :upcoming, -> {
     sort_by(aasm_state)
   }
 
@@ -51,7 +51,15 @@ class Event < ActiveRecord::Base
 ############################################################## Methods
 
   def all_seats_priced?
-    # check to see if all seats have been priced
+    return self.priced_seats.count == self.seats
+  end
+
+  def self.today
+    self.available.select {|e| e.show_date.to_date == Time.now.to_date}
+  end
+
+  def got_tickets?
+    return self.tickets.count == 0 ? false : true
   end
 
 end

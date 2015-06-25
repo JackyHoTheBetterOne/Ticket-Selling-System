@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   namespace :onlineticketing do
     resources :events, only: [] do
-      
+
       member do
         get :seat_update
         get :seat_view
@@ -36,8 +36,9 @@ Rails.application.routes.draw do
     # authenticated :admin do
       # root :to => 'events#index', :as => :admin_root
     # end
-    resources :events, only: [:new, :create, :index, :show, :update] do
+    resources :events, only: [:new, :create, :index, :show, :update, :destroy] do
       post :copy, on: :member
+      get :admin, on: :member
       resources :seats, only: [:show]
     end
   end

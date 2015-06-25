@@ -10,11 +10,11 @@ class Event::TicketScanner
   def call()
     ticket = Ticket.find_ticket_by_barcode(@event.id, @barcode)
 
-    if ticket.aasm_state == "valid" && @event.show_date.to_date == Time.now.to_date
+    if ticket.aasm_state == "good" && @event.show_date.to_date == Time.now.to_date
       ticket.scanning
       ticket.save
       return {}
-    else 
+    else
       return {error: "Bad ticket"}
     end
   end

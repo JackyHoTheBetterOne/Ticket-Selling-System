@@ -12,7 +12,10 @@ gem 'mandrill-api'
 gem 'figaro'
 gem 'haml'
 gem 'delayed_job_active_record'
-gem "daemons"
+gem 'daemons'
+gem 'rqrcode_png'
+gem 'bootstrap-sass', '~> 3.3.5'
+gem 'simple_form'
 
 
 
@@ -62,4 +65,3 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-

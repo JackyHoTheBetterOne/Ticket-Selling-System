@@ -71,7 +71,7 @@ class Onlineticketing::EventsController < ApplicationController
   end
 
   def event_listing
-    @events = Event.all
+    @events = Event.today
   end
 
 
