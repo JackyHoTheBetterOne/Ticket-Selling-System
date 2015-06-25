@@ -25,6 +25,7 @@ class Event::SeatPurchaser
       amount += s.price_group.price
       is_valid = false if s.aasm_state != 'onhold'
     end
+
     if is_valid
       customer = Stripe::Customer.create(
         email: @customer_email,
@@ -38,15 +39,18 @@ class Event::SeatPurchaser
         currency: 'CAD'
       )
 
-      t = TicketPackage.create(email: @customer_email,
-                                name: @customer_name)
+      tp = TicketPackage.new(email: @customer_email,
+                              name: @customer_name)
+
 
       @seat_selection.each do |s|
         t = Ticket.new(event_id: @event_id,
                         seat_id: s.id,
-                        ticket_package_id: t.id)
+                        ticket_package_id: tp.id)
         t.add_code_and_image
         t.save
+        s.purchase
+        s.save
       end
     else
       @is_successful = false

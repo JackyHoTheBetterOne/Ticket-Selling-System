@@ -1,0 +1,14 @@
+<div>
+  <%= form_tag %>
+  <%= text_field_tag :keyword, params[:keyword],
+    class: "package-search-field" %>
+  <%= submit_tag "Search Package",
+    class: "btn btn-default search-package-but" %>
+</div>
+<br/>
+<h3>Package List</h3>
+<div class="package-list">
+  <% packages.each do |p| %>
+    <%= p.name %>
+  <% end %>
+</div>

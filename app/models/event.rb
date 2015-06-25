@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   has_many :price_groups, dependent: :destroy
   has_many :priced_seats, through: :price_groups, source: :seats
   has_many :tickets, through: :seats, dependent: :destroy
-  has_many :ticket_packages, through: :tickets
+  has_many :ticket_packages
 
 
 ########################################################## SQL queries

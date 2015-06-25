@@ -73,13 +73,13 @@ $header_height: 22%;
         width: 100%;
         height: 33%;
         background: asset-url('zoom-icons.png');
-        background-position: 342px 0px;
+        background-position: 100% 0px;
         background-size: cover;
         cursor: pointer;
       }
       .zoom-out {
         @extend .zoom-in;
-        background-position: 300px 0px;
+        background-position: 0% 0px;
       }
       .zoom-off {
         width: 100%;

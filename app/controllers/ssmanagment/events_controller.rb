@@ -44,6 +44,10 @@ class Ssmanagment::EventsController < Ssmanagment::BaseController
   def admin
     find_event()
     @event = EventDecorator.new(@event)
+    @price_groups = @event.price_groups
+    @ticket_packages = TicketPackageDecorator.new(
+                        TicketPackage.search_by_keywords(@event.id, params[:keyword])
+                       )
   end
 
   private

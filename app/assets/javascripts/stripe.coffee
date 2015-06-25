@@ -44,7 +44,7 @@ $ ->
           $form.find('.payment-errors').text(response.error.message)
         else
           params_obj = {
-            token: response.id,
+            stripe_token: response.id,
             customer_name: $(".customer-name").val(),
             customer_email: $(".customer-email").val(),
             seat_selection: assembleSelectedSeats()

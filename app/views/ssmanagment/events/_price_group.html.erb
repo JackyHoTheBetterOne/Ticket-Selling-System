@@ -1,0 +1,17 @@
+<br/>
+<div class="price-group-form">
+  <%= form_tag %>
+  <%= label_tag "Price:"%>
+  <%= text_field_tag :keyword, params[:keyword],
+    class: "package-search-field" %>
+  <%= submit_tag "Create Group",
+    class: "btn btn-default search-package-but" %>
+</div>
+<br/>
+<h3>Price Group List</h3>
+<div class="price-group-list">
+  <% price_groups.each do |g| %>
+    <strong style="font-size: 125%;"><%= g.price %></strong> &nbsp;
+    <button class="btn btn-default"> Assign Price </button>
+  <% end %>
+</div>
