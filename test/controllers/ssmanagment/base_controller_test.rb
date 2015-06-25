@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Ssmanagment::BaseControllerTest < ActionController::TestCase
+class Ssmanagement::BaseControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end

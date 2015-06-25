@@ -1,0 +1,6 @@
+@mixin attrTransform($value) 
+{
+  transform:          #{$value};
+  -webkit-transform:  #{$value};
+  -ms-transform:      #{$value};
+}

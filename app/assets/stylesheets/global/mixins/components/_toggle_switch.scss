@@ -1,0 +1,121 @@
+@mixin componentToggleSwitch($status: null, $active-color: #1adab0, $font-size: 1.5rem)
+{
+  position: relative; 
+  width: 64px;
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
+
+  .onoffswitch-checkbox 
+  {
+      display: none;
+  }
+
+  .onoffswitch-label 
+  {
+      display: block; 
+      overflow: hidden; 
+      cursor: pointer;
+      background: rgba(black, .2);
+      border-radius: 16px;
+      margin: 0;
+  }
+
+  .onoffswitch-inner 
+  {
+      display: block; 
+      width: 200%; 
+      margin-left: -100%;
+      -moz-transition: margin 0.3s ease-in 0s; 
+      -webkit-transition: margin 0.3s ease-in 0s;
+      -o-transition: margin 0.3s ease-in 0s; 
+      transition: margin 0.3s ease-in 0s;
+  }
+
+  .onoffswitch-inner:before, 
+  .onoffswitch-inner:after 
+  {
+      display: block; 
+      float: left; 
+      width: 50%; 
+      height: 32px; 
+      padding: 0; 
+      line-height: 32px;
+      font-size: 14px; 
+      color: white; 
+      -moz-box-sizing: border-box; 
+      -webkit-box-sizing: border-box; 
+      box-sizing: border-box;
+  }
+
+  .onoffswitch-inner:before 
+  {
+      content: "";
+      padding-left: 10px;
+      // background-color: #1adab0; 
+      color: #FFFFFF;
+  }
+
+  .onoffswitch-inner:after 
+  {
+      content: "";
+      padding-right: 10px;
+      text-align: right;
+  }
+
+  .onoffswitch-switch 
+  {
+      display: block;
+      width: 26px;
+      margin: 3px;
+      background: rgba(white, .4);
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 32px;
+      -moz-transition: all 0.3s ease-in 0s; 
+      -webkit-transition: all 0.3s ease-in 0s;
+      -o-transition: all 0.3s ease-in 0s; 
+      transition: all 0.3s ease-in 0s; 
+      box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+  }
+
+  @if $status
+  {
+    .onoffswitch-status
+    {
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 32px;
+      text-transform: capitalize;
+      font-weight: normal;
+      font-size: $font-size;
+      @include attrTransform(translateX(calc(-100% - 20px)));
+      &:before 
+      {
+        content: "#{map-get($status, "off")}";
+        color: rgba(white, .4);
+      }
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label + .onoffswitch-status:before 
+    {
+      content: "#{map-get($status, "on")}";
+      color: $active-color;
+    }
+  }
+
+
+  .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner 
+  {
+      margin-left: 0;
+  }
+
+  .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch 
+  {
+      right: 0px; 
+      background: $active-color;
+  }
+}

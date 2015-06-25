@@ -1,0 +1,24 @@
+@mixin attrBorder($style: null, $stroke: null, $color:  null, $stroke-left: null, $direction: "all", $reset: false) 
+{
+  @if $direction == "all"
+  {
+    @if $reset == true
+    {
+      border-style: none;        
+      border-width: 0;           
+      border-color: transparent; 
+    }
+    @else
+    {
+      @if $style  { border-style:   $style;  }
+      @if $stroke { border-width:   $stroke; }
+      @if $color  { border-color:   $color;  }
+    }
+  }
+  @else 
+  {
+    @if $style  { border-#{$direction}-style:   $style;  }
+    @if $stroke { border-#{$direction}-width:   $stroke; }
+    @if $color  { border-#{$direction}-color:   $color;  }
+  }
+}

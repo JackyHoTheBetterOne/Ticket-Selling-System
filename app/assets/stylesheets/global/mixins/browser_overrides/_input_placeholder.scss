@@ -1,0 +1,28 @@
+@mixin uiInputPlaceholder($color, $font-weight: normal) 
+{
+  ::-webkit-input-placeholder 
+  {
+    color: $color;
+    font-weight: $font-weight;
+  }
+  /* Firefox 18- */
+  :-moz-placeholder 
+  { 
+    color:        $color;  
+    font-weight:  $font-weight;
+  }
+  
+  /* Firefox 19+ */
+  ::-moz-placeholder 
+  {  
+    color:        $color;  
+    font-weight:  $font-weight;
+  }
+  
+  /* Firefox 19+ */
+  :-ms-input-placeholder 
+  {  
+    color:        $color;  
+    font-weight:  $font-weight;
+  }
+}

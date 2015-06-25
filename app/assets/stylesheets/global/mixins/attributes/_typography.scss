@@ -1,0 +1,32 @@
+@mixin attrFontClass($family: null, $size: null, $color: null, $text-transform: null, $font-weight:null, $line-height: null, $text-align:null, $type: null) 
+{
+  @if $text-align { text-align:   $text-align;  }
+  @if $type       {
+    $font_compiled_list: map-merge($font-default-map, $font-custom-map);
+    @each $font_class, $font_attr in $font_compiled_list 
+    {
+      @if not($font_class == "fallback" or $font_class == 'base')
+      {
+        // @warn "#{$font_class}";
+        @if $type == $font_class 
+        {
+          @if $family           { font-family:     $family;           } @else { font-family:      font-properties($font_type:  $font_class,    $key: "font-family")     }
+          @if $size             { font-size:       $size;             } @else { font-size:        font-properties($font_type:  $font_class,    $key: "font-size");      }
+          @if $color            { color:           $color;            } @else { color:            font-properties($font_type:  $font_class,    $key: "color");          }
+          @if $text-transform   { text-transform:  $text-transform;   } @else { text-transform:   font-properties($font_type:  $font_class,    $key: "text-tranform");  }
+          @if $font-weight      { font-weight:     $font-weight;      } @else { font-weight:      font-properties($font_type:  $font_class,    $key: "font-weight");    }
+          @if $line-height      { line-height:     $line-height;      } @else { line-height:      font-properties($font_type:  $font_class,    $key: "line-height") * font-properties($font_type: $font_class, $key: "font-size"); }
+        }
+      }
+    }
+  }
+
+  @if not($type) 
+  {
+    @if $family             { font-family:     $family;         }
+    @if $size               { font-size:       $size;           }
+    @if $color              { color:           $color;          }
+    @if $text-transform     { text-transform:  $text-transform; }
+    @if $font-weight        { font-weight:     $font-weight;    }
+  }
+}

@@ -1,0 +1,39 @@
+$screen-size-map: 
+(
+  "xs": 
+  (
+    "min": $screen-xs-min,
+    "max": $screen-xs-max,
+  ),
+  "sm": 
+  (
+    "min": $screen-sm-min,
+    "max": $screen-sm-max,
+  ),
+  "md": 
+  (
+    "min": $screen-md-min,
+    "max": $screen-md-max,
+  ),
+  "lg":
+  (
+    "min": $screen-lg-min,
+  ),
+) !default;
+
+@function mediaSize($media_size, $bound)
+{
+  @if map-has-key($screen-size-map, $media_size)
+  {
+    $curr_size: map-get($screen-size-map, $media_size);
+    @if map-has-key($curr_size, $bound)
+    {
+      @return map-get($curr_size, $bound);
+    }
+    @warn "couldn't find #{$bound} in #{$curr_size} form $screen-size-map";
+    @return null;
+  }
+  @warn "couldn't find #{$media_size} form $screen-size-map";
+  @return null;
+}
+

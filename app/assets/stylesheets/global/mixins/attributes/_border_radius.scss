@@ -1,0 +1,16 @@
+@mixin attrBorderRadius($reset: false, $border-radius: null) 
+{
+  @if $reset == true
+  {
+    border-radius: 0;
+  }
+ 
+  @if $border-radius and type-of($border-radius) == 'map'
+  {
+    @each $key, $value in $border-radius 
+    {
+      #{$key}:#{$value};
+    }
+  } 
+  
+}

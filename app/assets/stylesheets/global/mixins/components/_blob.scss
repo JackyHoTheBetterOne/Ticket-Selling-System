@@ -1,0 +1,24 @@
+@mixin componentBlob($blob-type:null, $blob-alignment: null, $blob-prop: null)
+{
+  @if map-has-key($blob-type-map, $blob-type)
+  {
+    $type_list: map-get($blob-type-map, $blob-type);
+    @if type-of($type_list) == "map"
+    {
+      @if map-has-key($type_list, $blob-alignment)
+      {
+        $prop_list: map-get($type-list, $blob-alignment);
+        @if map-has-key($type_list, "base")
+        {
+          $base_props: map-get($type-list, "base");
+          @each $key, $value in $base_props { #{$key}: #{$value}; }
+        }
+        @each $key, $value in $prop_list { #{$key}: #{$value}; }
+      }
+    }
+  }
+  @if type-of($blob-prop) == "map"
+  {
+    @each $key, $value in $blob-prop { #{$key}: $value; }
+  }
+}

@@ -1,0 +1,75 @@
+$select-whitelist: () !default;
+
+
+html *,
+body *
+{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  @each $element in $select-whitelist
+  {
+    #{unquote($element)}
+    {
+      -webkit-touch-callout: initial;
+      -webkit-user-select: initial;
+      -khtml-user-select: initial;
+      -moz-user-select: initial;
+      -ms-user-select: initial;
+      user-select: initial;
+      cursor: initial;
+    }
+  }
+}
+
+$pointer-event-blacklist: () !default;
+
+@each $element, $props in $pointer-event-blacklist
+{
+  #{$element}
+  {
+    pointer-events: none;
+    @if type-of($props) == 'map'
+    {
+      @if map-has-key($props, "except")
+      {
+        $exceptions: map-get($props, "except");
+        @each $tag in $exceptions
+        {
+          #{$tag} { pointer-events: auto; }
+        }
+      }
+    }
+  }
+}
+
+$cursor-whitelist: 
+(
+  "pointer":
+  (
+    "[data-js-click]",
+    "[data-js-change]",
+    "[data-css-click]",
+    "[data-rails-trigger]",
+  ),
+) !default;
+
+html *,
+body *
+{
+  cursor: default;
+  @each $pointer_type, $elements in $cursor-whitelist
+  {
+    @if type-of($elements) == 'list'
+    {
+      @each $element in $elements
+      {
+        #{unquote($element)},
+        #{unquote($element)} * { cursor: #{$pointer_type}; }
+      }
+    }
+  }
+}

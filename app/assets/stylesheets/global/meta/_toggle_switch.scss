@@ -1,0 +1,161 @@
+$base-switch-map:
+(
+  width:         64px,
+  height:        32px,
+  font-size:     14px,
+  color:         white,
+  margin:        3px,
+  active-color:  #549e6b,
+  status:
+  (
+    on:  "",
+    off: "",
+  ),
+);
+
+
+$custom-switch-map: () !default;
+
+@function getSwitchAttr($switch-type, $attr)
+{
+  @if map-has-key($custom-switch-map, $switch-type)
+  {
+    $switch_type: map-get($custom-switch-map, $switch-type);
+    @if map-has-key($switch_type, $attr)
+    {
+      @return map-get($switch_type, $attr);
+    }
+    @else
+    {
+      @warn "the #{inspect($attr)} is not defined in #{inspect($switch-type)}";
+      @return map-get($base-switch-map, $attr);
+    }
+  }
+  @else
+  {
+    @warn "the #{$switch-type} is not defined in $custom-switch-map";
+    @return map-get($base-switch-map, $attr);
+  }
+}
+
+
+@each $switch_type, $switch_attr in $custom-switch-map
+{
+  $status: getSwitchAttr($switch_type, status);
+  #{$switch_type}
+  {
+    position: relative; 
+    width: getSwitchAttr($switch_type, width);
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    #{$switch_type}-checkbox 
+    {
+      display: none;
+    }
+    #{$switch_type}-label 
+    {
+        display: block; 
+        overflow: hidden; 
+        cursor: pointer;
+        background: rgba(black, .2);
+        border-radius: 16px;
+        margin: 0;
+        // box-shadow: 0 0 0 1px rgba(white, .1);
+    }
+    #{$switch_type}-inner 
+    {
+      display: block; 
+      width: 200%; 
+      margin-left: -100%;
+      -moz-transition: margin 0.3s ease-in 0s; 
+      -webkit-transition: margin 0.3s ease-in 0s;
+      -o-transition: margin 0.3s ease-in 0s; 
+      transition: margin 0.3s ease-in 0s;
+      &:before,
+      &:after
+      {
+        display: block; 
+        float: left; 
+        width: 50%; 
+        height: getSwitchAttr($switch_type, height); 
+        padding: 0; 
+        line-height: getSwitchAttr($switch_type, height);
+        font-size: getSwitchAttr($switch_type, font-size); 
+        color: getSwitchAttr($switch_type, color); 
+        -moz-box-sizing: border-box; 
+        -webkit-box-sizing: border-box; 
+        box-sizing: border-box;
+      }
+      &:before 
+      {
+        content: "";
+        padding-left: 10px;
+      }
+
+      &:after 
+      {
+        content: "";
+        padding-right: 10px;
+        text-align: right;
+      }
+    }
+    #{$switch_type}-switch 
+    {
+        display: block;
+        width: getSwitchAttr($switch_type, height) - getSwitchAttr($switch_type, margin) * 2;
+        margin: getSwitchAttr($switch_type, margin);
+        background: rgba(white, .4);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 32px;
+        -moz-transition: all 0.3s ease-in 0s; 
+        -webkit-transition: all 0.3s ease-in 0s;
+        -o-transition: all 0.3s ease-in 0s; 
+        transition: all 0.3s ease-in 0s; 
+        // box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    }
+
+    #{$switch_type}-status
+    {
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: getSwitchAttr($switch_type, height);
+      text-transform: capitalize;
+      font-weight: normal;
+      font-size: 1.6rem;
+      transform: translateX(calc(-100% - 20px));
+      &:before 
+      {
+        content: map-get($status, off);
+        color: rgba(white, .4);
+      }
+    }
+    #{$switch_type}-checkbox:checked + #{$switch_type}-label + #{$switch_type}-status:before 
+    {
+      content: map-get($status, on);
+      color: getSwitchAttr($switch_type, active-color);
+    }
+
+    #{$switch_type}-checkbox:checked + #{$switch_type}-label
+    {
+      background: getSwitchAttr($switch_type, active-color);
+    }
+
+    #{$switch_type}-checkbox:checked + #{$switch_type}-label #{$switch_type}-inner 
+    {
+        margin-left: 0;
+    }
+
+    #{$switch_type}-checkbox:checked + #{$switch_type}-label #{$switch_type}-switch 
+    {
+        right: 0px; 
+        background: white;
+    }
+  }
+}
+
+

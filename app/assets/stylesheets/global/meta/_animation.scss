@@ -1,0 +1,71 @@
+$animation-map:
+(
+  prefix: "[data-css-receiver='anchor']",
+  whitelist: (),
+) !default;
+
+
+@function animationPrefix()
+{
+  @return map-get($animation-map, prefix);
+}
+
+@function hasAnimation($anchor)
+{
+  $animation_white_list: map-get($animation-map, whitelist);
+  @if map-has-key($animation_white_list, $anchor)
+  {
+    @return $anchor;
+  }
+  @else
+  {
+    @warn "the anchor #{$anchor} is not defined";
+    @return null;
+  }
+}
+
+@function hasAnimateClass($anchor, $class)
+{
+  $animation_white_list: map-get($animation-map, whitelist);
+  @if map-has-key($animation_white_list, $anchor)
+  {
+    $class_list: map-get($animation_white_list, $anchor);
+    @if index($class_list, $class) != null
+    {
+      @return true;
+    }
+    @else
+    {
+      @warn "the class is not in #{$anchor} - #{$class_list}";
+      @return false;
+    }
+  }
+  @else
+  {
+    @warn "the anchor #{$anchor} is not defined";
+    @return false;
+  }
+}
+
+@if $isUiDebugging
+{
+  #{animationPrefix()}:before
+  {
+    content: "animation is not defined";
+    color: color("red", "base");
+  }
+
+  @each $anchor, $class_list in map-get($animation-map, whitelist)
+  {
+    $prefix: animationPrefix();
+    #{$anchor}
+    {
+      &:before           
+      {
+        content: "animation prefix: #{$prefix} not attached";
+        color: color("red", "base");
+      }
+      &#{$prefix}:before { content: none; }
+    }
+  }
+}

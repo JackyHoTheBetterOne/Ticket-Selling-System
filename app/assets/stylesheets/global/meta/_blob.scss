@@ -1,0 +1,77 @@
+$blob-prefix : 'blob-' !default;
+
+$blob-type-map:
+(
+  "abs":
+  (
+    "base":
+    (
+      position: absolute,
+      top:      -9999px,
+      bottom:   -9999px,
+      left:     -9999px,
+      right:    -9999px,
+      margin:   auto,
+    ),
+    "fill-height": (height:     100%),
+    "fill-width":  (width:      100%),
+    "max-height":  (max-height: 100%),
+    "max-width":   (max-width:  100%),
+    "expand":      
+    (
+      min-height: 100%,
+      min-width:  100%,
+    ),
+  ),
+  "normal":
+  (
+    "base":
+    (
+      position: absolute,
+    ),
+    "fill-height":
+    (
+      left:               50%,
+      height:             100%,
+      transform:          translate(-50%, 0),
+      -webkit-transform:  translate(-50%, 0),
+      -ms-transform:      translate(-50%, 0),
+    ),
+    "fill-width":
+    (
+      top:                50%,
+      height:             100%,
+      transform:          translate(0, -50%),
+      -webkit-transform:  translate(0, -50%),
+      -ms-transform:      translate(0, -50%),
+    ),
+  ),
+) !default;
+
+@each $blob_type, $type_items in $blob-type-map
+{
+  .#{$blob-prefix}wrapper.#{$blob-prefix}#{$blob_type}
+  {
+    position: relative;
+    overflow: hidden;
+    @each $item_name, $item_value in $type_items 
+    {
+      @if not($item_name == 'base')
+      {
+        &.#{$blob-prefix}#{$item_name}
+        {
+          img 
+          {
+            @if map-has-key($type_items, "base")
+            {
+              $base: map-get($type_items, "base");
+              @each $key, $value in $base { #{$key}: #{$value}; }
+            }
+            @each $key, $value in $item_value { #{$key}: #{$value}; }
+          }
+        }
+      }
+    }
+  }
+}
+

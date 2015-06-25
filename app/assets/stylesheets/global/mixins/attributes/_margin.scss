@@ -1,0 +1,8 @@
+@mixin attrMargin($top: null, $bottom: null, $left:  null, $right: null, $all: null) 
+{
+  @if $all    { margin:         $all;    }
+  @if $top    { margin-top:     $top;    }
+  @if $bottom { margin-bottom:  $bottom; }
+  @if $left   { margin-left:    $left;   }
+  @if $right  { margin-right:   $right;  }
+}

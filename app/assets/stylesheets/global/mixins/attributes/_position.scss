@@ -1,0 +1,23 @@
+@mixin attrPosition($position: null, $left: null, $right: null, $top: null, $bottom: null, $overflow: null, $fill: false) {
+  @if $fill == true {
+    @if $position { position: $position;  }
+    top:    0;
+    bottom: 0;
+    left:   0;
+    right:  0;
+  } @else {
+    @if $position { position: $position;  }
+    @if $top      { top:      $top;       }
+    @if $bottom   { bottom:   $bottom;    }
+    @if $left     { left:     $left;      }
+    @if $right    { right:    $right;     }
+  }
+
+  @if $overflow { 
+    @if type-of($overflow) == "map" {
+      @each $key, $value in $overflow { overflow-#{$key}: $value; }
+    } @else { 
+      overflow: $overflow; 
+    }
+  }
+}

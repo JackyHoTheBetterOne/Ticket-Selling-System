@@ -1,0 +1,29 @@
+$button-map: () !default;
+
+@each $btn_type, $btn_attrs in $button-map 
+{
+  #{$btn_type}{
+    @each $attr_key, $attr_val in $btn_attrs
+    {
+      @if $attr_key == '&'
+      {
+        @each $addition, $val_list in $attr_val
+        {
+          &#{$addition} 
+          { 
+            @each $key, $val in  $val_list { #{$key}: $val; } 
+          }
+        }
+      }
+      @else if $attr_key == 'box-shadow'
+      {
+        -webkit-box-shadow: #{$attr_val};
+        -moz-box-shadow:    #{$attr_val};
+        -ms-box-shadow:     #{$attr_val};
+        -o-box-shadow:      #{$attr_val};
+        box-shadow:         #{$attr_val};
+      }
+      @else { #{$attr_key}: $attr_val; }
+    }
+  }
+}
