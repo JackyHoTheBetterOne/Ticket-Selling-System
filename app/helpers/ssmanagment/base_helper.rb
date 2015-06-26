@@ -1,2 +1,0 @@
-module Ssmanagment::BaseHelper
-end

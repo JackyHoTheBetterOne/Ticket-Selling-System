@@ -1,0 +1,22 @@
+@mixin attrBackground($image: null, $size: null, $color: null, $position: null, $repeat: null, $attachment: null, $reset: false) 
+{
+  @if $reset == true
+  {
+    background: transparent;
+  }
+  @else
+  {
+    @if $image        { background-image:         #{$image};       }
+    @if $color        { background-color:         #{$color};       }
+    @if $position     { background-position:      #{$position};    }
+    @if $repeat       { background-repeat:        #{$repeat};      }
+    @if $attachment   { background-attachment:    #{$attachment};  }
+    @if $size         
+    { 
+      background-size:          #{$size};        
+      -webkit-background-size:  #{$size};
+      -moz-background-size:     #{$size};
+      -o-background-size:       #{$size};
+    }
+  }
+}

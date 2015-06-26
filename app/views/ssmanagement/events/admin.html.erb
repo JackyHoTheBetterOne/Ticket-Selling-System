@@ -1,0 +1,43 @@
+<div>
+  <h1><%= @event.name %></h1>
+  <%= link_to 'Event List', ssmanagement_events_path ,class: "btn btn-default" %>
+</div>
+
+<br/>
+<div data-example-id="togglable-tabs">
+  <ul id="myTabs" class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#Dashboard" id="Dashboard-tab" role="tab" data-toggle="tab" aria-controls="Dashboard" aria-expanded="true">
+        Dashboard
+      </a>
+    </li>
+    <li role="presentation" class="">
+      <a href="#Ticket" role="tab" id="Ticket-tab" data-toggle="tab"
+          aria-controls="Ticket" aria-expanded="false">
+        Ticket Package
+      </a>
+    </li>
+    <li role="presentation" class="">
+      <a href="#Pricing" role="tab" id="Pricing-tab" data-toggle="tab"
+          aria-controls="Pricing" aria-expanded="false">
+        Pricing Group
+      </a>
+    </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="Dashboard" aria-labelledby="Dashboard-tab">
+      <br />
+      <%= render partial: "dashboard",
+        locals: {event: @event} %>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="Ticket" aria-labelledby="Ticket-tab">
+      <br />
+      <%= render partial: "ticket_package",
+        locals: {packages: @ticket_packages} %>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="Pricing" aria-labelledby="Pricing-tab">
+      <%= render partial: "price_group",
+        locals: {price_groups: @price_groups} %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+@mixin attrAnchorLink($cursor: pointer, $color: inherit, $hover-color: inherit, $hover-text-decoration: null) 
+{
+  cursor: $cursor;
+  color:  $color;
+  &:hover {
+    color:           $hover-color;
+    text-decoration: $hover-text-decoration;
+  }
+}

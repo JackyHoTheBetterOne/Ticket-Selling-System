@@ -1,0 +1,34 @@
+@mixin componentButton($type: null, $props: null)
+{
+  @each $btn_type, $btn_attrs in $button-map 
+  {
+    @if $type == $btn_type 
+    {
+      @each $attr_key, $attr_val in $btn_attrs
+      {
+        @if $attr_key == 'hover'
+        {
+          @if type-of($attr_val) == 'map'
+          {
+            &:hover
+            {
+              @each $key, $val in $attr_val 
+              { 
+                #{$key}: $val; 
+              }
+            }
+          }
+        }
+        @else if $attr_key == 'box-shadow'
+        {
+          @include attrBoxShadow($attr_val);
+        }
+        @else { #{$attr_key}: $attr_val; }
+      }
+    }
+  }
+  @if type-of($props) == "map"
+  {
+    @each $key, $value in $props { #{$key}: $value; }
+  }
+}

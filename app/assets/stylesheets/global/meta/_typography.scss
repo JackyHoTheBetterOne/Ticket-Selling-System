@@ -1,0 +1,146 @@
+// for mixin attrFontClass
+$font-base:      Helvetica Neue,Helvetica,Arial,sans-serif !default;
+$font-default:   "Gotham" !default;
+
+$font-custom-map:
+(
+) !default;
+
+$font-default-map:
+(
+  "fallback":
+  (
+    font-family: "#{$font-default}" #{$font-base},
+    font-size: 1rem,
+    line-height: 1.2,
+  ),
+  "h1": 
+  (
+    font-size:   4.2rem,
+    line-height: 1.2,
+    font-weight: 700,
+  ),
+  "h2": 
+  (
+    font-size:  3.56rem,
+    font-weight: 700,
+  ),     
+  "h3": 
+  (
+    font-size: 2.92rem,
+    font-weight: 700,
+  ),
+  "h4":       
+  (
+    font-size: 2rem,
+    font-weight: 700,
+  ),
+  "h5":       
+  (
+    font-size: 1.64rem,
+    font-weight: 700,
+  ),
+  "h6":       
+  (
+    font-size: 1.4rem,
+    font-weight: 700,
+  ),
+  "p":        
+  (
+    font-size: 1rem,
+  ),
+) !default;
+
+$font-import-map: 
+(
+  "Gotham": 
+  (
+    "Light":    ("format": ("eot",  "woff", "ttf"), "font-weight": 300),
+    "Regular":  ("format": ("eot",  "woff"       ), "font-weight": 400),
+    "Bold":     ("format": ("eot",  "woff", "ttf"), "font-weight": 700),
+  ),
+) !default;
+
+
+@function font-properties($font_type, $key)
+{
+  $font-map: map-merge($font-default-map, $font-custom-map);
+  @if map-has-key($font-map, $font_type)
+  {
+    $curr_type:       map-get($font-map, $font_type);
+    $fallback_type:   map-get($font-map, "fallback");
+    @if map-has-key($curr_type, $key)
+    {
+      @return map-get($curr_type, $key);
+    } 
+    @else if map-has-key($fallback_type, $key) 
+    {
+      @return map-get($fallback_type, $key);
+    }
+    @else 
+    {
+      @warn "Couldn't find #{inspect($key)} in either #{inspect($curr_type)} or #{inspect($fallback_type)}";
+      @return null;
+    }
+  }
+  @warn "Couldn't find #{inspect($font-type)} from $font-default-map && $font-custom-map";
+  @return null;
+}
+
+html *, 
+body *
+{
+  font-family: "#{$font-default}", #{$font-base};
+  .ui-tooltip { font-family: inherit; }
+}
+
+
+// Import font from font map
+@each $font_class, $font_vars in $font-import-map
+{
+  @each $font_type, $font_attr in $font_vars 
+  {
+    // @warn "#{inspect($font_attr)}";
+    @font-face {
+      font-family: "#{$font_class}";
+      @if map-has-key($font_attr, "format") 
+      {
+        $format_list: map-get($font_attr, "format");
+        // @warn "#{inspect($format_list)}";
+        @each $format in $format_list 
+        {
+          $format_type: $format;
+          @if $format == "ttf" 
+          {
+            $format_type: "truetype";
+          }
+          src: asset-url("#{$font_class}/#{$font_class}#{$font_type}.#{$format}") format(#{$format_type});
+          // @warn "(#{$font_class}#{$font_type}.#{format}) format(#{$format})";
+        }
+      }
+      @if map-has-key($font_attr, "font-weight") 
+      {
+        $font_w: map-get($font_attr, "font-weight");
+        font-weight: $font_w;
+      }
+    }
+  }
+}
+
+// Create html tag css
+$font-map: map-merge($font-default-map, $font-custom-map);
+@each $font_class, $font_attr in $font-map
+{
+  @if not($font_class == "fallback" or $font_class == 'base')
+  {
+    #{$font_class} 
+    {
+      font-family:      font-properties($font_type: #{$font_class},   $key: "font-family");
+      font-size:        font-properties($font_type: #{$font_class},   $key: "font-size");               
+      color:            font-properties($font_type: #{$font_class},   $key: "color");               
+      text-transform:   font-properties($font_type: #{$font_class},   $key: "text-transform");               
+      font-weight:      font-properties($font_type: #{$font_class},   $key: "font-weight");               
+      line-height:      font-properties($font_type: #{$font_class},   $key: "line-height") * font-properties($font_type: #{$font_class}, $key: "font-size");             
+    }
+  }
+}

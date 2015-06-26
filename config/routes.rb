@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :ssmanagment do
+  namespace :ssmanagement do
     root 'events#index'
     devise_for :admin,
       skip: [:registrations, :edit, :password],
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
                     sign_in: "login",
                     sign_out: "logout"
                   },
-      controllers: { sessions: "ssmanagment/admin/sessions" }
+      controllers: { sessions: "ssmanagement/admin/sessions" }
     # authenticated do # all other roles
     #   root :to => 'events#index', :as => :admin_root
     # end

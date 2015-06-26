@@ -1,0 +1,2 @@
+module Ssmanagement::BaseHelper
+end
