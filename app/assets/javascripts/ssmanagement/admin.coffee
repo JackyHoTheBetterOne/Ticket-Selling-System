@@ -1,5 +1,5 @@
 $ ->
-  if window.location.href.indexOf('ssmanagment/events/') isnt -1
+  if window.location.href.indexOf('ssmanagement/events/') isnt -1
     ADMIN_CONTROL = ((global, $) ->
       ticket_div = document.getElementById("Ticket")
       return {
