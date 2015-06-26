@@ -3,15 +3,21 @@
   <%= form_tag %>
   <%= label_tag "Price:"%>
   <%= text_field_tag :keyword, params[:keyword],
-    class: "package-search-field" %>
+    class: "price-group-price" %>
   <%= submit_tag "Create Group",
-    class: "btn btn-default search-package-but" %>
+    class: "btn btn-default create-price-but" %>
 </div>
 <br/>
 <h3>Price Group List</h3>
 <div class="price-group-list">
   <% price_groups.each do |g| %>
-    <strong style="font-size: 125%;"><%= g.price %></strong> &nbsp;
-    <button class="btn btn-default"> Assign Price </button>
+    <div>
+      <strong style="font-size: 125%;">
+      <%= g.price %>
+      </strong>
+      <button class="btn btn-default" id="<%= g.id %>">
+        Assign Price
+      </button>
+    </div>
   <% end %>
 </div>
