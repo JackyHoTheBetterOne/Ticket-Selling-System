@@ -11,12 +11,15 @@
 <h3>Price Group List</h3>
 <div class="price-group-list">
   <% price_groups.each do |g| %>
-    <div>
+    <div id="price-group-<%= g.id %>">
       <strong style="font-size: 125%;">
       <%= g.price %>
       </strong>
       <button class="btn btn-default" id="<%= g.id %>">
-        Assign Price
+        Assign
+      </button>
+      <button class="btn btn-default delete-group-but" id="<%= g.id %>">
+        Delete
       </button>
     </div>
   <% end %>

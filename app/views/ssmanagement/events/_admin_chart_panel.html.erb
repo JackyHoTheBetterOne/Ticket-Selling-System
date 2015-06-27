@@ -1,0 +1,21 @@
+<div class="admin-chart-panel">
+  <h2 id="admin-panel-title"></h2>
+  -
+  <button class="admin-select-toggle">
+    Seat Select
+  </button>
+  <button class="admin-select-toggle">
+    Row Select
+  </button>
+  <button id="admin-action">
+    Submit
+  </button>
+  <div class="seat-chart-box">
+    <%=
+      inline_svg('qe_theatre.svg',
+        {class: "qe-seating-chart lower", data: {scale: 1}})
+    %>
+    <div class="text-box-bubble" style="position: absolute;">
+    </div>
+  </div>
+</div>

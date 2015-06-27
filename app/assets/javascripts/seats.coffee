@@ -1,9 +1,4 @@
 $ ->
-  if window.location.href.indexOf("seat_view") isnt -1
-    $('circle').each ->
-      id = undefined
-      id = $(this).data('row').toString() + "-" + $(this).data('column').toString()
-      $(this).attr 'id', id
     SEAT_SELECTOR = ((global, $) ->
       circle_mouseover_color = '#696969'
       circle_original_color = '#3b77bf'
@@ -38,11 +33,6 @@ $ ->
           params_obj.push(seat_name)
           i++
         return params_obj
-      seat_class_recontruction = (circle) ->
-        basic_klass = "seat-circle"
-        row_klass = "row-" + $(circle).data('row')
-        column_klass = "column-" + $(circle).data('column')
-        return basic_klass + " " + row_klass + " " + column_klass
       create_selected_seat_box = (object) ->
         seat_box = document.createElement('div')
         id = "selected-" + object.row + "-" + object.column
@@ -84,12 +74,8 @@ $ ->
             circle = this
             $(circle).attr('fill', circle_mouseover_color)
             SEAT_SELECTOR.timer = setTimeout (->
-              position = $(circle).position()
-              cX = position.left
-              cY = position.top
-              x = cX - 21
-              y = cY - 77
-              $(box).css({top:y, left: x, opacity: 1, 'z-index': 5})
+              window.CHART_INTERACTOR.circle_position_translation_to_box(
+                circle, box, 21, 77)
             ), 500
           circle_mouseleave: (event) ->
             circle = this
@@ -97,28 +83,31 @@ $ ->
             if check_if_ticket_available(klass)
               $(circle).attr('fill', get_default_color(circle))
             window.clearTimeout(SEAT_SELECTOR.timer)
-            $(box).css({"opacity":"0", 'z-index': '-1'})
+            window.CHART_INTERACTOR.box_hide(box)
           circle_click: (event) ->
             circle = this
             klass = $(circle).attr('class')
             if check_if_ticket_not_taken(klass)
-              if check_if_ticket_not_selected(klass)
-                $(circle).attr('class', klass + " selected-seat")
-                selected_seats.push(circle)
-                box_fields = {
-                  row: $(circle).data("row"),
-                  column: $(circle).data("column")
-                }
-                selected_seat_container.appendChild(
-                  create_selected_seat_box(box_fields)
-                )
-              else
-                $(circle).attr('class', seat_class_recontruction(circle))
-                $(circle).attr('fill', get_default_color(circle))
-                index = selected_seats.indexOf(circle)
-                id = "#selected-" + $(circle).attr("id")
-                selected_seats.splice(index,1)
-                $(id).remove()
+              obj = {
+                circle: circle,
+                func: ->
+                  check_if_ticket_not_selected(klass)
+                true_callback: ->
+                  box_fields = {
+                    row: $(circle).data("row"),
+                    column: $(circle).data("column")
+                  }
+                  selected_seats.push(circle)
+                  selected_seat_container.appendChild(
+                    create_selected_seat_box(box_fields)
+                  )
+                false_callback: ->
+                  id = "#selected-" + $(circle).attr("id")
+                  index = selected_seats.indexOf(circle)
+                  selected_seats.splice(index,1)
+                  $(id).remove()
+              }
+              global.CHART_INTERACTOR.mouseclick_circle(obj)
           submit_seats: (event) ->
             params_obj = transform_seat_array(selected_seats)
             $.ajax
@@ -220,7 +209,8 @@ $ ->
                 price_array.push(price) if price_array.indexOf(price) is -1
                 circle.setAttribute("data-price", price)
                 if seat.status isnt 'available'
-                  new_klass = seat_class_recontruction(circle) + " taken-seat"
+                  new_klass = global.CHART_INTERACTOR.
+                    seat_class_recontruction(circle) + " taken-seat"
                   circle.setAttribute('class', new_klass)
                   circle.setAttribute('fill', circle_mouseover_color)
                 i++
@@ -244,16 +234,21 @@ $ ->
               alert("Cannot updated seats!")
       }
     )(window, jQuery)
-    $('.seat-circle').on(
-      'mouseenter.circle_selection', SEAT_SELECTOR.events.circle_mouseenter
-    ).on(
-      'mouseleave.circle_selection', SEAT_SELECTOR.events.circle_mouseleave
-    )
-    $('.seat-circle').on('click.select', SEAT_SELECTOR.events.circle_click)
-    $('.submit-seats').on('click.submit_seats', SEAT_SELECTOR.events.submit_seats)
-    $(".map-filter").on('change.change_map', SEAT_SELECTOR.events.switch_map)
-    $(".price-filter").on("change.change_price", SEAT_SELECTOR.events.filter_price)
-    SEAT_SELECTOR.update_seating_chart()
-    $(".zoom-in").on("click.zoom_in", SEAT_SELECTOR.events.zoom_in)
-    $(".zoom-out").on("click.zoom_out", SEAT_SELECTOR.events.zoom_out)
-    $(".zoom-off").on("click.zoom_off", SEAT_SELECTOR.events.zoom_off)
+    if window.location.href.indexOf("seat_view") isnt -1
+      $('circle').each ->
+        id = undefined
+        id = $(this).data('row').toString() + "-" + $(this).data('column').toString()
+        $(this).attr 'id', id
+      $('.seat-circle').on(
+        'mouseenter.circle_selection', SEAT_SELECTOR.events.circle_mouseenter
+      ).on(
+        'mouseleave.circle_selection', SEAT_SELECTOR.events.circle_mouseleave
+      )
+      $('.seat-circle').on('click.select', SEAT_SELECTOR.events.circle_click)
+      $('.submit-seats').on('click.submit_seats', SEAT_SELECTOR.events.submit_seats)
+      $(".map-filter").on('change.change_map', SEAT_SELECTOR.events.switch_map)
+      $(".price-filter").on("change.change_price", SEAT_SELECTOR.events.filter_price)
+      SEAT_SELECTOR.update_seating_chart()
+      $(".zoom-in").on("click.zoom_in", SEAT_SELECTOR.events.zoom_in)
+      $(".zoom-out").on("click.zoom_out", SEAT_SELECTOR.events.zoom_out)
+      $(".zoom-off").on("click.zoom_off", SEAT_SELECTOR.events.zoom_off)

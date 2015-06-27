@@ -41,7 +41,7 @@ Rails.application.routes.draw do
       get :admin, on: :member
       resources :seats, only: [:show]
     end
-    resources :price_groups, only: [:create]
+    resources :price_groups, only: [:create, :destroy]
   end
 
   namespace :scanner do

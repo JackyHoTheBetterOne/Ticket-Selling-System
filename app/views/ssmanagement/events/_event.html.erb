@@ -16,7 +16,7 @@
       Edit
     </a>
     <%= link_to "Destroy", ssmanagement_event_path(event), method: :delete,
-      class: "btn btn-danger" %>
+      class: "btn btn-danger", data: {confirm: "Are you sure about this?"} %>
   </div>
   <div class="panel-footer">
     <div id="<%= dom_id(event) %>-edit" class="panel-collapse collapse">

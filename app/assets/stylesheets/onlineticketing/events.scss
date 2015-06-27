@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 %overlay {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   background: rgba(25,25,25,0.97);
@@ -12,16 +12,17 @@
   opacity: 0;
   z-index: -1;
   transition: opacity 0.3s, z-index 0.3s;
+  overflow: scroll;
 }
 
 @mixin centering($margin_top) {
   position: absolute;
   left: 0px;
   right: 0px;
-  margin: $margin_top auto;   
+  margin: $margin_top auto;
 }
 
-.seats-loading-overlay {
+.seats-loading-overlay, .admin-overlay {
   @extend %overlay;
 }
 

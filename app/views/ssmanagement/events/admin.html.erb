@@ -1,13 +1,19 @@
+<div class="admin-overlay">
+  <%= render partial: "admin_chart_panel" %>
+</div>
+
 <div>
-  <h1><%= @event.name %></h1>
-  <%= link_to 'Event List', ssmanagement_events_path ,class: "btn btn-default" %>
+  <h1 class= "event-name" id="<%= @event.id %>"><%= @event.name %></h1>
+  <%= link_to 'Event List', ssmanagement_events_path,
+    class: "btn btn-default" %>
 </div>
 
 <br/>
 <div data-example-id="togglable-tabs">
   <ul id="myTabs" class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active">
-      <a href="#Dashboard" id="Dashboard-tab" role="tab" data-toggle="tab" aria-controls="Dashboard" aria-expanded="true">
+      <a href="#Dashboard" id="Dashboard-tab" role="tab" data-toggle="tab"
+        aria-controls="Dashboard" aria-expanded="true">
         Dashboard
       </a>
     </li>
@@ -25,7 +31,8 @@
     </li>
   </ul>
   <div id="myTabContent" class="tab-content">
-    <div role="tabpanel" class="tab-pane fade active in" id="Dashboard" aria-labelledby="Dashboard-tab">
+    <div role="tabpanel" class="tab-pane fade active in" id="Dashboard"
+    aria-labelledby="Dashboard-tab">
       <br />
       <%= render partial: "dashboard",
         locals: {event: @event} %>
