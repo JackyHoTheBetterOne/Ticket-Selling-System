@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625211354) do
+ActiveRecord::Schema.define(version: 20150626234321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,16 @@ ActiveRecord::Schema.define(version: 20150625211354) do
 
   add_index "price_groups", ["event_id"], name: "index_price_groups_on_event_id", using: :btree
 
+  create_table "seat_transactions", force: :cascade do |t|
+    t.integer  "seat_id"
+    t.integer  "transaction_log_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "seat_transactions", ["seat_id"], name: "index_seat_transactions_on_seat_id", using: :btree
+  add_index "seat_transactions", ["transaction_log_id"], name: "index_seat_transactions_on_transaction_log_id", using: :btree
+
   create_table "seats", force: :cascade do |t|
     t.string   "row"
     t.string   "column"
@@ -99,20 +109,32 @@ ActiveRecord::Schema.define(version: 20150625211354) do
     t.integer  "level",          default: 1
     t.integer  "ticket_id"
     t.float    "x_coor"
-    t.string   "seat_type",      default: "Regular"
     t.integer  "price_group_id"
+    t.string   "seat_type",      default: "Regular"
   end
 
   add_index "seats", ["event_id"], name: "index_seats_on_event_id", using: :btree
   add_index "seats", ["name"], name: "index_seats_on_name", using: :btree
 
+  create_table "ticket_package_transactions", force: :cascade do |t|
+    t.integer  "ticket_package_id"
+    t.integer  "transaction_log_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "ticket_package_transactions", ["ticket_package_id"], name: "index_ticket_package_transactions_on_ticket_package_id", using: :btree
+  add_index "ticket_package_transactions", ["transaction_log_id"], name: "index_ticket_package_transactions_on_transaction_log_id", using: :btree
+
   create_table "ticket_packages", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.text     "keywords"
     t.integer  "event_id"
+    t.string   "aasm_state"
+    t.datetime "deleted_state_at"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -130,5 +152,18 @@ ActiveRecord::Schema.define(version: 20150625211354) do
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
   add_index "tickets", ["seat_id"], name: "index_tickets_on_seat_id", using: :btree
 
+  create_table "transaction_logs", force: :cascade do |t|
+    t.datetime "date"
+    t.integer  "transaction_num"
+    t.string   "transaction_type"
+    t.text     "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
   add_foreign_key "price_groups", "events", on_delete: :cascade
+  add_foreign_key "seat_transactions", "seats"
+  add_foreign_key "seat_transactions", "transaction_logs"
+  add_foreign_key "ticket_package_transactions", "ticket_packages"
+  add_foreign_key "ticket_package_transactions", "transaction_logs"
 end
